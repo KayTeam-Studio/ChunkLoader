@@ -1,0 +1,29 @@
+plugin-prefix: '&2&lChunk&a&lLoader &8&l> '
+command:
+  only-player: '&cEste comando solamente puede ser ejecutado por un jugador.'
+chunk-log: '&aLos chunks han sido cargados nuevamente.'
+addchunk:
+  correct: '&aEl chunk &7%chunk_coords% &aha sido registrado correctamente.'
+  exist: '&cEl chunk &7%chunk_coords% &cya se encuentra registrado.'
+removechunk:
+  correct: '&aEl chunk &7%chunk_coords% &afue desregistrado correctamente'
+  inexist: '&cEl chunk &7%chunk_coords% &cno se encuentra registrado.'
+chunkloader:
+  enable: '&fLa carga de chunks se ha activado.'
+  enable-already: '&cLa carga de chunks ya se encuentra activada.'
+  disable: '&fLa carga de chunks se ha desactivado,'
+  disable-already: '&cLa carga de chunks ya se encuentra desactivada.'
+  reload: '&fLa configuración fue recargada correctamente.'
+  teleport: '&aTe has teletransportado al chunk &7%chunk_coords% - %chunk_world%&a.'
+  teleport-invalid: '&cEl chunk que ingresaste no es correcto, usa &7/cl list&c.'
+  help:
+    - ' &8» &6&l/cl help&f: Muestra información de los comandos.'
+    - ' &8» &6&l/cl on&f: Activa la carga de chunks.'
+    - ' &8» &6&l/cl off&f: Desactiva la carga de chunks.'
+    - ' &8» &6&l/cl list&f: Muestra la lista de chunks registrados.'
+    - ' &8» &6&l/cl reload&f: Recarga los archivos de configuración.'
+    - ' &8» &6&l/cl tp&f: Teletransporta a un chunk del registro.'
+    - ' &8» &6&l/addchunk&f: Añade el chunk actual al registro.'
+    - ' &8» &6&l/removechunk&f: Elimina el chunk actual al registro.'
+  list: ' &8» &7%chunk_coords% - %chunk_world%'
+  list-null: '&cNo hay ningún chunk registrado.'

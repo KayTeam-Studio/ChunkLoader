@@ -1,0 +1,26 @@
+name: ChunkLoader
+main: org.kayteam.chunkloader.main.ChunkLoader
+version: 1.0
+author: segu23
+commands:
+  addchunk:
+    description: AddChunk
+    permission: chunkloader.addchunk
+  removechunk:
+    description: RemoveChunk
+    permission: chunkloader.removechunk
+  chunkloaderinfo:
+    description: ChunkLoaderInfo
+  chunkloader:
+    description: ChunkLoader
+    permission: chunkloader.chunkloader
+    aliases:
+      - cl
+      - cloader
+      - chunkl
+permissions:
+  chunkloader.admin:
+    children:
+      chunkloader.addchunk: true
+      chunkloader.removechunk: true
+      chunkloader.chunkloader: true
