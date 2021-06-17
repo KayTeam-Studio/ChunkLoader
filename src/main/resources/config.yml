@@ -1,3 +1,4 @@
+enable-load-on-start: true
 log-chunk-load: true
 chunk-load: true
 lang: en

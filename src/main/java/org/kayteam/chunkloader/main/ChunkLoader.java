@@ -24,7 +24,9 @@ public class ChunkLoader extends JavaPlugin {
     public YML data = new YML(this,"data");
     public YML config = new YML(this,"config");
 
-    public List<String> chunkList;
+    private boolean chunkLoad;
+
+    private List<String> chunkList;
 
     public String prefix;
     private final String logPrefix = "&2Chunk&aLoader &7>> &f";
@@ -33,6 +35,7 @@ public class ChunkLoader extends JavaPlugin {
     public void onEnable() {
         chunkLoader = this;
         config.registerFile();
+        chunkLoad = config.getFile().getBoolean("chunk-load");
         messages_es.registerFile();
         messages_en.registerFile();
         String lang = config.getFile().getString("lang");
@@ -49,8 +52,8 @@ public class ChunkLoader extends JavaPlugin {
         getLogger().info(Color.convert(logPrefix+"El plugin fue activado correctamente."));
         getLogger().info(Color.convert(logPrefix+"Creado por segu23"));
         registerListeners();
-        if(isChunkLoadEnable()){
-            loadChunks();
+        if(isChunkLoadEnableOnStart()){
+            enableChunkLoad();
         }
     }
 
@@ -63,21 +66,45 @@ public class ChunkLoader extends JavaPlugin {
     }
 
     public boolean isChunkLoadEnable(){
-        return config.getFile().getBoolean("chunk-load");
+        return chunkLoad;
     }
 
-    public void loadChunks() {
+    public boolean isChunkLoadEnableOnStart(){
+        return getConfig().getBoolean("enable-load-on-start");
+    }
+
+    public void enableChunkLoad() {
+        getConfig().set("chunk-load", true);
+        config.saveFile();
+        chunkLoad = true;
         FileConfiguration data = this.data.getFile();
         for(String chunkFormated : data.getStringList("chunks-list")){
             loadChunk(unformatChunk(formatChunk(chunkFormated)));
         }
     }
 
+    public void disableChunkLoad(){
+        getConfig().set("chunk-load", false);
+        config.saveFile();
+        chunkLoad = false;
+    }
+
     public void loadChunk(Chunk chunk){
         String[] chunkKey = formatChunk(chunk);
-        Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).loadChunk(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]));
-        Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).setChunkForceLoaded(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]), true);
-        getLogger().info(Color.convert(messages.getFile().getString("logs.load").replaceAll("%chunk%", formatChunkString(chunk))));
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Bukkit.getScheduler().runTaskAsynchronously(getChunkLoader(), new Runnable() {
+                    @Override
+                    public void run() {
+                        Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).loadChunk(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]));
+                        Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).setChunkForceLoaded(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]), true);
+                        getLogger().info(Color.convert(messages.getFile().getString("logs.load").replaceAll("%chunk%", formatChunkString(chunk))));
+                    }
+                });
+            }
+        });
+        thread.start();
     }
 
     public String[] formatChunk(Chunk chunk){
@@ -100,12 +127,6 @@ public class ChunkLoader extends JavaPlugin {
         return chunkList;
     }
 
-    public void unloadChunks(){
-        FileConfiguration data = this.data.getFile();
-        for(String chunkKey : data.getKeys(false)){
-            Objects.requireNonNull(Bukkit.getServer().getWorld(Objects.requireNonNull(data.getString(chunkKey + ".world")))).unloadChunk(data.getInt(chunkKey+".x"),data.getInt(chunkKey+".z"));
-        }
-    }
 
     private void registerCommands() {
         getCommand("addchunk").setExecutor(new Command_AddChunk(this));

@@ -17,11 +17,10 @@ public class Command_On {
         FileConfiguration config = plugin.config.getFile();
         if(config.getBoolean("enable-load-on-start")){
             Send.playerMessage(player,plugin.prefix+messages.getString("chunkloader.enable-already"));
-
         }else{
             config.set("enable-load-on-start",true);
             Send.playerMessage(player,plugin.prefix+messages.getString("chunkloader.enable"));
-            plugin.loadChunks();
+            plugin.enableChunkLoad();
             plugin.config.saveFile();
         }
     }

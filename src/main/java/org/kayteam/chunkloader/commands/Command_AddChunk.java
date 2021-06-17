@@ -39,7 +39,7 @@ public class Command_AddChunk implements CommandExecutor {
 
                 chunkLocation.setForceLoaded(true);
 
-                plugin.loadChunks();
+                plugin.enableChunkLoad();
 
                 Send.playerMessage(player, plugin.prefix+messages.getString("addchunk.correct")
                         .replaceAll("%chunk_coords%",chunkCoords));
