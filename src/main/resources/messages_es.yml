@@ -1,21 +1,24 @@
 plugin-prefix: '&2&lChunk&a&lLoader &8&l> '
 command:
   only-player: '&cEste comando solamente puede ser ejecutado por un jugador.'
-chunk-log: '&aLos chunks han sido cargados nuevamente.'
 addchunk:
   correct: '&aEl chunk &7%chunk_coords% &aha sido registrado correctamente.'
   exist: '&cEl chunk &7%chunk_coords% &cya se encuentra registrado.'
+logs:
+  load: '&aEl chunk &7%chunk% &afue cargado correctamente.'
+  messages: '&aEl archivo de mensajes &7%lang% &afue cargado correctamente.'
+  messages-error: '&cHubo un error tratando de cargar el archivo de mensajes &7%lang%&c.'
 removechunk:
-  correct: '&aEl chunk &7%chunk_coords% &afue desregistrado correctamente'
+  correct: '&aEl chunk &7%chunk_coords% &afue desregistrado correctamente.'
   inexist: '&cEl chunk &7%chunk_coords% &cno se encuentra registrado.'
 chunkloader:
   enable: '&fLa carga de chunks se ha activado.'
   enable-already: '&cLa carga de chunks ya se encuentra activada.'
-  disable: '&fLa carga de chunks se ha desactivado,'
+  disable: '&fLa carga de chunks se ha desactivado.'
   disable-already: '&cLa carga de chunks ya se encuentra desactivada.'
   reload: '&fLa configuración fue recargada correctamente.'
   teleport: '&aTe has teletransportado al chunk &7%chunk_coords% - %chunk_world%&a.'
-  teleport-invalid: '&cEl chunk que ingresaste no es correcto, usa &7/cl list&c.'
+  teleport-invalid: '&cEl chunk ingresado no es correcto, usa &7/cl list&c.'
   help:
     - ' &8» &6&l/cl help&f: Muestra información de los comandos.'
     - ' &8» &6&l/cl on&f: Activa la carga de chunks.'

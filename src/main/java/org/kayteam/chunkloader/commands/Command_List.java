@@ -20,14 +20,14 @@ public class Command_List {
         FileConfiguration messages = plugin.messages.getFile();
         FileConfiguration data = plugin.data.getFile();
 
-        if(data.getKeys(false)!=null){
+        if(data.getStringList("chunks-list")!=null){
             List<String> chunkList = new ArrayList<String>();
-            for(String key : data.getKeys(false)){
-                int chunkLocationX = data.getInt(key+".x");
-                int chunkLocationZ = data.getInt(key+".z");
-                String chunkLocationWorld = data.getString(key+".world");
+            for(String key : data.getStringList("chunks-list")){
+                int chunkLocationX = Integer.parseInt(plugin.formatChunk(key)[0]);
+                int chunkLocationZ = Integer.parseInt(plugin.formatChunk(key)[1]);
+                String chunkLocationWorld = plugin.formatChunk(key)[2];
 
-                String chunkCoords = "X: "+chunkLocationX+"; Z:"+chunkLocationZ;
+                String chunkCoords = "X: "+chunkLocationX+"; Z: "+chunkLocationZ;
 
                 chunkList.add(messages.getString("chunkloader.list")
                         .replaceAll("%chunk_coords%",chunkCoords)

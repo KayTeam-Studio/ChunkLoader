@@ -2,7 +2,6 @@ package org.kayteam.chunkloader.commands;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,6 +9,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.kayteam.chunkloader.main.ChunkLoader;
 import org.kayteam.chunkloader.util.Send;
+
+import java.util.List;
 
 public class Command_AddChunk implements CommandExecutor {
     private ChunkLoader plugin;
@@ -26,19 +27,19 @@ public class Command_AddChunk implements CommandExecutor {
             FileConfiguration messages = plugin.messages.getFile();
             Location playerLocation = player.getLocation();
             Chunk chunkLocation = playerLocation.getChunk();
-            World chunkLocationWorld = chunkLocation.getWorld();
-            int chunkLocationX = chunkLocation.getX();
-            int chunkLocationZ = chunkLocation.getZ();
-            String chunkLocationPath = chunkLocationWorld.getName()+chunkLocationX+chunkLocationZ;
-            String chunkCoords = "X: "+chunkLocationX+"; Z:"+chunkLocationZ;
+            String chunkCoords = "X: "+chunkLocation.getX()+"; Z:"+chunkLocation.getZ();
+            String chunkFormated = plugin.formatChunkString(chunkLocation);
 
-            if(data.getString(chunkLocationPath+".world")==null){
-                data.set(chunkLocationPath+".x",chunkLocationX);
-                data.set(chunkLocationPath+".z",chunkLocationZ);
-                data.set(chunkLocationPath+".world",chunkLocationWorld.getName());
+            if(!data.getStringList("chunks-list").contains(chunkFormated)){
+                List<String> chunkList = data.getStringList("chunks-list");
+                chunkList.add(chunkFormated);
+                data.set("chunks-list", chunkList);
+                plugin.getChunkList().add(chunkFormated);
                 plugin.data.saveFile();
 
-                plugin.loadChunks(plugin);
+                chunkLocation.setForceLoaded(true);
+
+                plugin.loadChunks();
 
                 Send.playerMessage(player, plugin.prefix+messages.getString("addchunk.correct")
                         .replaceAll("%chunk_coords%",chunkCoords));

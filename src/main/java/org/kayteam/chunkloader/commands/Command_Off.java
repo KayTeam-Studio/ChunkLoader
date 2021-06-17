@@ -19,7 +19,7 @@ public class Command_Off {
         if(config.getBoolean("enable-load-on-start")){
             Send.playerMessage(player,plugin.prefix+messages.getString("chunkloader.disable"));
 
-            plugin.unloadChunks(plugin);
+            plugin.unloadChunks();
 
             plugin.config.getFile().set("enable-load-on-start",false);
             plugin.config.saveFile();

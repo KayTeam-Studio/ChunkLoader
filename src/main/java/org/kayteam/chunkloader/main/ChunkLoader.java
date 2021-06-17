@@ -1,48 +1,109 @@
 package org.kayteam.chunkloader.main;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.Chunk;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kayteam.chunkloader.commands.Command_AddChunk;
 import org.kayteam.chunkloader.commands.Command_ChunkLoader;
 import org.kayteam.chunkloader.commands.Command_RemoveChunk;
+import org.kayteam.chunkloader.listeners.UnloadEvent;
 import org.kayteam.chunkloader.util.Color;
 import org.kayteam.chunkloader.util.YML;
 
+import java.util.List;
+import java.util.Objects;
+
 public class ChunkLoader extends JavaPlugin {
 
-    public ConsoleCommandSender logger = Bukkit.getConsoleSender();
+    public static ChunkLoader chunkLoader;
 
-    public YML messages = new YML(this,"messages");
+    public YML messages;
+    public YML messages_es = new YML(this, "messages_es");
+    public YML messages_en = new YML(this, "messages_en");
     public YML data = new YML(this,"data");
     public YML config = new YML(this,"config");
 
-    public String prefix = messages.getFile().getString("plugin-prefix");
-    private String logPrefix = "&2Chunk&aLoader &7>>> &f";
+    public List<String> chunkList;
+
+    public String prefix;
+    private final String logPrefix = "&2Chunk&aLoader &7>> &f";
 
     @Override
     public void onEnable() {
-        registerFiles();
+        chunkLoader = this;
+        config.registerFile();
+        messages_es.registerFile();
+        messages_en.registerFile();
+        String lang = config.getFile().getString("lang");
+        try{
+            messages = new YML(this,"messages_"+ lang);
+            getLogger().info(Color.convert(messages.getFile().getString("logs.messages").replaceAll("%lang%", "messages_"+lang)));
+        }catch (Exception e){
+            getLogger().info(Color.convert(messages.getFile().getString("logs.messages-error").replaceAll("%lang%", "messages_"+lang)));
+        }
+        prefix = messages.getFile().getString("plugin-prefix");
+        data.registerFile();
+        chunkList = data.getFile().getStringList("chunks-list");
         registerCommands();
-        if(config.getFile().getBoolean("enable-load-on-start")){
-            loadChunks(this);
-        }
-        logger.sendMessage(Color.convert(logPrefix+"El plugin fue activado correctamente."));
-        logger.sendMessage(Color.convert(logPrefix+"Creado por segu23"));
-    }
-
-    public void loadChunks(ChunkLoader plugin) {
-        FileConfiguration data = plugin.data.getFile();
-        for(String chunkKey : data.getKeys(false)){
-            Bukkit.getServer().getWorld(data.getString(chunkKey+".world")).loadChunk(data.getInt(chunkKey+".x"),data.getInt(chunkKey+".z"));
+        getLogger().info(Color.convert(logPrefix+"El plugin fue activado correctamente."));
+        getLogger().info(Color.convert(logPrefix+"Creado por segu23"));
+        registerListeners();
+        if(isChunkLoadEnable()){
+            loadChunks();
         }
     }
 
-    public void unloadChunks(ChunkLoader plugin){
-        FileConfiguration data = plugin.data.getFile();
+    private void registerListeners(){
+        getServer().getPluginManager().registerEvents(new UnloadEvent(), this);
+    }
+
+    public static ChunkLoader getChunkLoader(){
+        return chunkLoader;
+    }
+
+    public boolean isChunkLoadEnable(){
+        return config.getFile().getBoolean("chunk-load");
+    }
+
+    public void loadChunks() {
+        FileConfiguration data = this.data.getFile();
+        for(String chunkFormated : data.getStringList("chunks-list")){
+            loadChunk(unformatChunk(formatChunk(chunkFormated)));
+        }
+    }
+
+    public void loadChunk(Chunk chunk){
+        String[] chunkKey = formatChunk(chunk);
+        Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).loadChunk(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]));
+        Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).setChunkForceLoaded(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]), true);
+        getLogger().info(Color.convert(messages.getFile().getString("logs.load").replaceAll("%chunk%", formatChunkString(chunk))));
+    }
+
+    public String[] formatChunk(Chunk chunk){
+        return (chunk.getX()+";"+chunk.getZ()+";"+chunk.getWorld().getName()).split(";");
+    }
+
+    public String formatChunkString(Chunk chunk){
+        return (chunk.getX()+";"+chunk.getZ()+";"+chunk.getWorld().getName());
+    }
+
+    public String[] formatChunk(String chunkFormated){
+        return chunkFormated.split(";");
+    }
+
+    public Chunk unformatChunk(String[] chunkFormatedSplited){
+        return Objects.requireNonNull(Bukkit.getServer().getWorld(chunkFormatedSplited[2])).getChunkAt(Integer.parseInt(chunkFormatedSplited[0]),Integer.parseInt(chunkFormatedSplited[1]));
+    }
+
+    public List<String> getChunkList(){
+        return chunkList;
+    }
+
+    public void unloadChunks(){
+        FileConfiguration data = this.data.getFile();
         for(String chunkKey : data.getKeys(false)){
-            Bukkit.getServer().getWorld(data.getString(chunkKey+".world")).unloadChunk(data.getInt(chunkKey+".x"),data.getInt(chunkKey+".z"));
+            Objects.requireNonNull(Bukkit.getServer().getWorld(Objects.requireNonNull(data.getString(chunkKey + ".world")))).unloadChunk(data.getInt(chunkKey+".x"),data.getInt(chunkKey+".z"));
         }
     }
 
@@ -52,16 +113,10 @@ public class ChunkLoader extends JavaPlugin {
         getCommand("chunkloader").setExecutor(new Command_ChunkLoader(this));
     }
 
-    private void registerFiles() {
-        messages.registerFile();
-        data.registerFile();
-        config.registerFile();
-    }
-
     @Override
     public void onDisable() {
-        logger.sendMessage(Color.convert(logPrefix+"El plugin fue desactivado correctamente."));
-        logger.sendMessage(Color.convert(logPrefix+"Creado por segu23"));
+        getLogger().info(Color.convert(logPrefix+"El plugin fue desactivado correctamente."));
+        getLogger().info(Color.convert(logPrefix+"Creado por segu23"));
     }
 }
 

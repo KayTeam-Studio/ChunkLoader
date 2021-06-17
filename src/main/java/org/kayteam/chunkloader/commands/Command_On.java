@@ -21,7 +21,7 @@ public class Command_On {
         }else{
             config.set("enable-load-on-start",true);
             Send.playerMessage(player,plugin.prefix+messages.getString("chunkloader.enable"));
-            plugin.loadChunks(plugin);
+            plugin.loadChunks();
             plugin.config.saveFile();
         }
     }

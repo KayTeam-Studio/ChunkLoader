@@ -1,1 +1,3 @@
 log-chunk-load: true
+chunk-load: true
+lang: es

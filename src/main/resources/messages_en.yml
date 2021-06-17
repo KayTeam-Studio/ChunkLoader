@@ -1,0 +1,32 @@
+plugin-prefix: '&2&lChunk&a&lLoader &8&l> '
+command:
+  only-player: '&cThis command can only be executed by one player.'
+addchunk:
+  correct: '&aChunk &7%chunk_coords% &ahas been successfully registered.'
+  exist: '&cChunk &7%chunk_coords% &cis already registered.'
+logs:
+  load: '&aChunk &7%chunk% &awas loaded correctly.'
+  messages: '&7%lang% &afile was loaded successfully.'
+  messages-error: '&cThere was an error trying to load the file &7%lang%&c.'
+removechunk:
+  correct: '&aChunk &7%chunk_coords% &awas successfully unregistered.'
+  inexist: '&cChunk &7%chunk_coords% &cnot registered.'
+chunkloader:
+  enable: '&fChunk loading has been activated.'
+  enable-already: '&cChunk loading is already activated.'
+  disable: '&fChunk loading has been disabled.'
+  disable-already: '&cChunk loading is already disabled.'
+  reload: '&fConfiguration was reloaded correctly.'
+  teleport: '&aYou have teleported to the chunk &7%chunk_coords% - %chunk_world%&a.'
+  teleport-invalid: '&cThe entered chunk  is invalid, use &7/cl list&c.'
+  help:
+    - ' &8» &6&l/cl help&f: Displays information about commands.'
+    - ' &8» &6&l/cl on&f: Turn on chunk load.'
+    - ' &8» &6&l/cl off&f: Turn off chunk load.'
+    - ' &8» &6&l/cl list&f: Displays a list of registered chunks.'
+    - ' &8» &6&l/cl reload&f: Reload config.'
+    - ' &8» &6&l/cl tp <index>&f: Teleport to registered chunk.'
+    - ' &8» &6&l/addchunk&f: Add the current chunk to the registry.'
+    - ' &8» &6&l/removechunk&f: Delete the current chunk of the registry.'
+  list: ' &8» &7%chunk_coords% - %chunk_world%'
+  list-null: '&cThere is no registered chunk.'
