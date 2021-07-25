@@ -13,16 +13,15 @@ import org.kayteam.chunkloader.main.ChunkLoader;
 import org.kayteam.chunkloader.util.Send;
 
 public class Command_RemoveChunk implements CommandExecutor {
-    private ChunkLoader plugin;
-
-    public Command_RemoveChunk(ChunkLoader plugin) {
-        this.plugin = plugin;
-    }
+    private ChunkLoader plugin = ChunkLoader.getChunkLoader();
 
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if(sender instanceof Player){
             Player player = (Player) sender;
-
+            if(!player.hasPermission("chunkloader.removechunk ")){
+                Send.playerMessage(player, plugin.messages.getFile().getString("command.no-permissions"));
+                return false;
+            }
             FileConfiguration data = plugin.data.getFile();
             FileConfiguration messages = plugin.messages.getFile();
             Location playerLocation = player.getLocation();

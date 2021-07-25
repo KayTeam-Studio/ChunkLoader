@@ -1,4 +1,90 @@
-enable-load-on-start: true
 log-chunk-load: true
 chunk-load: true
 lang: en
+plugin-prefix: '&2&lChunk&a&lLoader &8&l> &f'
+menu:
+  general-options:
+    items:
+      fill:
+        material: GRAY_STAINED_GLASS_PANE
+        display-name: ' '
+      close:
+        material: BARRIER
+        display-name: '&4Close'
+        lore:
+          - ""
+          - "&7Click to close"
+      back:
+        material: FEATHER
+        display-name: '&6Go back'
+        lore:
+          - ""
+          - "&7Click to go back"
+      next-page:
+        material: ARROW
+        display-name: '&6Next page'
+        lore:
+          - ""
+          - "&7Go to the next page"
+      previous-page:
+        material: ARROW
+        display-name: '&6Previous page'
+        lore:
+          - ""
+          - "&7Go to the previous page"
+  main-menu:
+    title: "Main Menu"
+    items:
+      admin-section:
+        material: REDSTONE
+        display-name: '&6Admin settings'
+        lore:
+          - ""
+          - "&7Open admin section"
+      chunk-list:
+        material: GRASS_BLOCK
+        display-name: '&6Chunk List'
+        lore:
+          - ""
+          - "&7Open menu with chunk list"
+  admin-section:
+    title: "Admin Section"
+    items:
+      turn-off-chunk-load:
+        material: RED_WOOL
+        display-name: '&cTurn off chunk load'
+        lore:
+          - ""
+          - "&7Click to disable chunk load"
+      turn-on-chunk-load:
+        material: GREEN_WOOL
+        display-name: '&aTurn on chunk load'
+        lore:
+          - ""
+          - "&7Click to enable chunk load"
+      turn-off-chunk-load-logs:
+        material: REDSTONE_BLOCK
+        display-name: '&cTurn off chunk load logs'
+        lore:
+          - ""
+          - "&7Click to disable chunk load logs"
+      turn-on-chunk-load-logs:
+        material: EMERALD_BLOCK
+        display-name: '&aTurn on chunk load logs'
+        lore:
+          - ""
+          - "&7Click to enable chunk load logs"
+  chunk-list:
+    title: "Chunk List"
+    items:
+      listed:
+        material: GRASS_BLOCK
+        display-name: '&7Chunk #&6%index%'
+        lore:
+          - ""
+          - " &7- X: &f%coords_x%"
+          - " &7- Z: &f%coords_z%"
+          - " &7- World: &f%coords_world%"
+          - ""
+          - "&7Left-click to teleport to this chunk"
+          - "&7Right-click to delete this chunk"

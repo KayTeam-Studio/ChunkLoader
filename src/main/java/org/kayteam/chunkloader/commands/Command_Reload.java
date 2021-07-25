@@ -5,11 +5,7 @@ import org.kayteam.chunkloader.main.ChunkLoader;
 import org.kayteam.chunkloader.util.Send;
 
 public class Command_Reload {
-    private ChunkLoader plugin;
-
-    public Command_Reload(ChunkLoader plugin){
-        this.plugin = plugin;
-    }
+    private ChunkLoader plugin = ChunkLoader.getChunkLoader();
 
     public void commandReload(Player player){
         plugin.data.reloadFile();

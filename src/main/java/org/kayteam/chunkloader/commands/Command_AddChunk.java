@@ -8,38 +8,38 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.ChunkManager;
 import org.kayteam.chunkloader.util.Send;
 
 import java.util.List;
 
 public class Command_AddChunk implements CommandExecutor {
-    private ChunkLoader plugin;
+    private ChunkLoader plugin = ChunkLoader.getChunkLoader();
 
-    public Command_AddChunk(ChunkLoader plugin) {
-        this.plugin = plugin;
-    }
 
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if(sender instanceof Player){
+            ChunkManager chunkManager = plugin.getChunkManager();
             Player player = (Player) sender;
-
+            if(!player.hasPermission("chunkloader.addchunk ")){
+                Send.playerMessage(player, plugin.messages.getFile().getString("command.no-permissions"));
+                return false;
+            }
             FileConfiguration data = plugin.data.getFile();
             FileConfiguration messages = plugin.messages.getFile();
             Location playerLocation = player.getLocation();
             Chunk chunkLocation = playerLocation.getChunk();
             String chunkCoords = "X: "+chunkLocation.getX()+"; Z:"+chunkLocation.getZ();
-            String chunkFormated = plugin.formatChunkString(chunkLocation);
+            String chunkFormated = chunkManager.formatChunkString(chunkLocation);
 
             if(!data.getStringList("chunks-list").contains(chunkFormated)){
                 List<String> chunkList = data.getStringList("chunks-list");
                 chunkList.add(chunkFormated);
                 data.set("chunks-list", chunkList);
-                plugin.getChunkList().add(chunkFormated);
+                chunkManager.getChunkStringList().add(chunkFormated);
                 plugin.data.saveFile();
 
                 chunkLocation.setForceLoaded(true);
-
-                plugin.enableChunkLoad();
 
                 Send.playerMessage(player, plugin.prefix+messages.getString("addchunk.correct")
                         .replaceAll("%chunk_coords%",chunkCoords));

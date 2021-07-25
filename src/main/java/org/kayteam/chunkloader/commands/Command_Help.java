@@ -8,11 +8,7 @@ import org.kayteam.chunkloader.util.Send;
 import java.util.List;
 
 public class Command_Help {
-    private ChunkLoader plugin;
-
-    public Command_Help(ChunkLoader plugin){
-        this.plugin = plugin;
-    }
+    private ChunkLoader plugin = ChunkLoader.getChunkLoader();
 
     public void chunkHelp(Player player){
         FileConfiguration messages = plugin.messages.getFile();
