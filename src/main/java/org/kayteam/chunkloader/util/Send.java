@@ -2,7 +2,6 @@ package org.kayteam.chunkloader.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.kayteam.chunkloader.main.ChunkLoader;
 
@@ -19,8 +18,7 @@ public class Send {
     }
 
     public static void insufficientArgs(Player player){
-        FileConfiguration messages = plugin.messages.getFile();
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&',messages.getString("insufficientArgs")));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.messages.getString("insufficientArgs")));
     }
 
     public static void Console(String message) {

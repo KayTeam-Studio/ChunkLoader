@@ -10,10 +10,7 @@ import org.kayteam.chunkloader.listeners.ChunkUnload;
 import org.kayteam.chunkloader.listeners.Inventory_Menu;
 import org.kayteam.chunkloader.listeners.OPJoin;
 import org.kayteam.chunkloader.menus.Menu;
-import org.kayteam.chunkloader.util.Color;
-import org.kayteam.chunkloader.util.Metrics;
-import org.kayteam.chunkloader.util.UpdateChecker;
-import org.kayteam.chunkloader.util.YML;
+import org.kayteam.chunkloader.util.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,11 +20,11 @@ public class ChunkLoader extends JavaPlugin {
     public static ChunkLoader chunkLoader;
     public ChunkManager chunkManager;
 
-    public YML messages;
-    public YML messages_es = new YML(this, "messages_es");
-    public YML messages_en = new YML(this, "messages_en");
-    public YML data = new YML(this,"data");
-    public YML config = new YML(this,"config");
+    public Yaml messages;
+    public Yaml messages_es = new Yaml(this, "messages_es");
+    public Yaml messages_en = new Yaml(this, "messages_en");
+    public Yaml data = new Yaml(this,"data");
+    public Yaml config = new Yaml(this,"config");
 
     public String prefix;
     public final String logPrefix = "&2Chunk&aLoader &7>> &f";
@@ -42,23 +39,22 @@ public class ChunkLoader extends JavaPlugin {
     public void onEnable() {
         chunkLoader = this;
         chunkManager = new ChunkManager();
+        KayTeam.sendBrandMessage(this, "&aEnabled");
+        enablePluginUpdateChecker();
         checkPaper();
         registerFiles();
         loadConfig();
         loadMessages();
         registerCommands();
         enableBStats();
-        enablePluginUpdateChecker();
         registerListeners();
         loadAll();
-        getLogger().info(Color.convert(logPrefix+"The plugin was enabled successfully."));
-        getLogger().info(Color.convert(logPrefix+"Developed by segu23#4485."));
     }
 
     private void loadConfig(){
-        chunkManager.chunkLoad = config.getFile().getBoolean("chunk-load", true);
-        lang = config.getFile().getString("lang", "en");
-        prefix = config.getFile().getString("plugin-prefix", "&2&lChunk&a&lLoader &8&l> ");
+        chunkManager.chunkLoad = config.getBoolean("chunk-load", true);
+        lang = config.getString("lang", "en");
+        prefix = config.getString("plugin-prefix", "&2&lChunk&a&lLoader &8&l> ");
         chunkManager.loadChunkList();
     }
 
@@ -68,30 +64,31 @@ public class ChunkLoader extends JavaPlugin {
 
     private void loadMessages(){
         try{
-            messages = new YML(this,"messages_"+ lang);
-            getLogger().info(Color.convert(logPrefix+messages.getFile().getString("logs.messages").replaceAll("%lang%", "messages_"+lang)));
+            messages = new Yaml(this,"messages_"+ lang);
+            messages.registerFileConfiguration();
+            getLogger().info(Color.convert(logPrefix+messages.getString("logs.messages").replaceAll("%lang%", "messages_"+lang)));
         }catch (Exception e){
-            getLogger().info(Color.convert(logPrefix+messages.getFile().getString("logs.messages-error").replaceAll("%lang%", "messages_"+lang)));
+            getLogger().info(Color.convert(logPrefix+messages_en.getString("logs.messages-error").replaceAll("%lang%", "messages_"+lang)));
         }
     }
 
     private void registerFiles(){
-        config.registerFile();
-        messages_es.registerFile();
-        messages_en.registerFile();
-        data.registerFile();
+        config.registerFileConfiguration();
+        messages_es.registerFileConfiguration();
+        messages_en.registerFileConfiguration();
+        data.registerFileConfiguration();
     }
 
     private void enablePluginUpdateChecker(){
-        new UpdateChecker(this, 92834).getVersion(version -> {
-            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                getLogger().info(Color.convert(logPrefix+"&fThere is not a new update available."));
-                newUpdate = false;
-            } else {
-                getLogger().info(Color.convert(logPrefix+"&aThere is a new update available."));
-                newUpdate = true;
-            }
-        });
+        updateChecker = new UpdateChecker(this, 92834);
+        if (updateChecker.getUpdateCheckResult().equals(UpdateChecker.UpdateCheckResult.OUT_DATED)) {
+            updateChecker.sendOutDatedMessage(getServer().getConsoleSender());
+        }
+    }
+
+    private UpdateChecker updateChecker;
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
     }
 
     private void enableBStats(){
@@ -114,7 +111,7 @@ public class ChunkLoader extends JavaPlugin {
 
     private void loadAll(){
         getServer().getPluginManager().registerEvents(new ChunkUnload(), this);
-        if(config.getFile().getBoolean("chunk-load")){
+        if(config.getBoolean("chunk-load")){
             chunkManager.enableChunkLoad();
         }
         CMD_Menu = new Command_Menu();
@@ -138,8 +135,7 @@ public class ChunkLoader extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getLogger().info(Color.convert(logPrefix+"The plugin was successfully disabled."));
-        getLogger().info(Color.convert(logPrefix+"Developed by segu23#4485."));
+        KayTeam.sendBrandMessage(this, "&cDisabled");
     }
 }
 

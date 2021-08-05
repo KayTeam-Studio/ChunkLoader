@@ -18,7 +18,7 @@ public class Command_ChunkLoader implements CommandExecutor, TabCompleter {
         if(sender instanceof Player){
             Player player = (Player) sender;
             if(!player.hasPermission("chunkloader.chunkloader ")){
-                Send.playerMessage(player, plugin.messages.getFile().getString("command.no-permissions"));
+                Send.playerMessage(player, plugin.messages.getString("command.no-permissions"));
                 return false;
             }
             if(args.length>0){

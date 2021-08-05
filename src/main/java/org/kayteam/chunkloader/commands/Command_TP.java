@@ -2,7 +2,6 @@ package org.kayteam.chunkloader.commands;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.kayteam.chunkloader.main.ChunkLoader;
 import org.kayteam.chunkloader.main.ChunkManager;
@@ -15,9 +14,7 @@ public class Command_TP {
 
     public void chunkTeleport(Player player, String chunkNumber){
         ChunkManager chunkManager = plugin.getChunkManager();
-        FileConfiguration data = plugin.data.getFile();
-        List<String> chunkList = data.getStringList("chunks-list");
-        FileConfiguration messages = plugin.messages.getFile();
+        List<String> chunkList = plugin.data.getStringList("chunks-list");
             try{
                 int chunkListNumber = Integer.valueOf(chunkNumber)-1;
                 String chunk = chunkList.get(chunkListNumber);
@@ -27,20 +24,20 @@ public class Command_TP {
                 Double chunkLocationZ_Integer = chunkLocationZ;
                 World chunkLocationWorld = plugin.getServer().getWorld(chunkManager.formatChunk(chunk)[2]);
 
-                String chunkCoords = "X: "+data.getInt(chunkList.get(chunkListNumber)+".x")+
-                        "; Z:"+data.getInt(chunkList.get(chunkListNumber)+".z");
+                String chunkCoords = "X: "+plugin.data.getInt(chunkList.get(chunkListNumber)+".x")+
+                        "; Z:"+plugin.data.getInt(chunkList.get(chunkListNumber)+".z");
 
                 Location chunkLocation = new Location(chunkLocationWorld,chunkLocationX,
                         chunkLocationWorld.getHighestBlockYAt(chunkLocationX_Integer.intValue(), chunkLocationZ_Integer.intValue())+1,
                         chunkLocationZ);
 
-                Send.playerMessage(player,plugin.prefix+messages.getString("chunkloader.teleport")
+                Send.playerMessage(player,plugin.prefix+plugin.messages.getString("chunkloader.teleport")
                         .replaceAll("%chunk_coords%",chunkCoords)
                         .replaceAll("%chunk_world%",chunkLocationWorld.getName()));
 
                 player.teleport(chunkLocation);
             }catch (Exception e){
-                Send.playerMessage(player, plugin.prefix+messages.getString("chunkloader.teleport-invalid"));
+                Send.playerMessage(player, plugin.prefix+plugin.messages.getString("chunkloader.teleport-invalid"));
             }
     }
 }

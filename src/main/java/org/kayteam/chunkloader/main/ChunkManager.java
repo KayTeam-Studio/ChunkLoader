@@ -40,74 +40,82 @@ public class ChunkManager {
     }
 
     public void setChunkLoadLogs(boolean state){
-        plugin.config.getFile().set("log-chunk-load", state);
-        plugin.config.saveFile();
+        plugin.config.set("log-chunk-load", state);
+        plugin.config.saveFileConfiguration();
         chunkLoadLogs = state;
     }
 
-    public void enableChunkLoad() {
-        plugin.config.getFile().set("chunk-load", true);
-        plugin.config.saveFile();
-        chunkLoad = true;
-        chunkLoadLogs = plugin.config.getFile().getBoolean("log-chunk-load");
-        for(String chunkFormated : chunkStringList){
-            loadChunk(unformatChunk(chunkFormated.split(";")));
-        }
-    }
-
-    public void disableChunkLoad(){
-        plugin.config.getFile().set("chunk-load", false);
-        plugin.config.saveFile();
-        chunkLoad = false;
-        for(String chunk : chunkStringList){
-            String[] chunkFormated = formatChunk(chunk);
-            Bukkit.getWorld(chunkFormated[2]).getChunkAt(Integer.parseInt(chunkFormated[0]), Integer.parseInt(chunkFormated[1])).setForceLoaded(false);
+    public void loadChunk(Chunk chunk){
+        String[] chunkKey = formatChunk(chunk);
+        if(chunk.getWorld() != null){
+            Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).loadChunk(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]));
+            Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).setChunkForceLoaded(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]), true);
             if(isChunkLoadLogsEnable()){
-                plugin.getLogger().info(Color.convert(plugin.logPrefix+plugin.messages.getFile().getString("logs.unload").replaceAll("%chunk%", chunk)));
+                plugin.getLogger().info(Color.convert(plugin.logPrefix+plugin.messages.getString("logs.load").replaceAll("%chunk%", formatStringChunk(chunk))));
             }
         }
     }
 
-    public void deleteChunk(String chunk, Player player){
+    public void enableChunkLoad() {
+        plugin.config.set("chunk-load", true);
+        plugin.config.saveFileConfiguration();
+        chunkLoad = true;
+        for(Chunk chunk : chunkList){
+            loadChunk(chunk);
+        }
+    }
+
+    public void disableChunkLoad(){
+        plugin.config.set("chunk-load", false);
+        plugin.config.saveFileConfiguration();
+        chunkLoad = false;
+        for(Chunk chunk : chunkList){
+            unloadChunk(chunk);
+        }
+    }
+
+    public void unloadChunk(Chunk chunk){
+        String[] chunkFormated = formatChunk(chunk);
+        Bukkit.getWorld(chunkFormated[2]).getChunkAt(Integer.parseInt(chunkFormated[0]), Integer.parseInt(chunkFormated[1])).setForceLoaded(false);
+        if(isChunkLoadLogsEnable()){
+            plugin.getLogger().info(Color.convert(plugin.logPrefix+plugin.messages.getString("logs.unload").replaceAll("%chunk%", formatStringChunk(chunk))));
+        }
+    }
+
+    public void deleteChunk(Chunk chunk, Player player){
         Chunk chunkLocation = unformatChunk(formatChunk(chunk));
         World chunkLocationWorld = chunkLocation.getWorld();
         int chunkLocationX = chunkLocation.getX();
         int chunkLocationZ = chunkLocation.getZ();
         String chunkCoords = "X: "+chunkLocationX+"; Z:"+chunkLocationZ;
         if(plugin.getChunkManager().getChunkList().contains(chunkLocation)){
-            List<String> chunkList = plugin.data.getFile().getStringList("chunks-list");
+            List<String> chunkList = plugin.data.getStringList("chunks-list");
             chunkList.remove(chunk);
-            plugin.data.getFile().set("chunks-list", chunkList);
-            plugin.data.saveFile();
+            plugin.data.set("chunks-list", chunkList);
+            plugin.data.saveFileConfiguration();
             Bukkit.getWorld(chunkLocationWorld.getName()).setChunkForceLoaded(chunkLocationX,chunkLocationZ,false);
-            Send.playerMessage(player,plugin.prefix+plugin.messages.getFile().getString("removechunk.correct")
+            Send.playerMessage(player,plugin.prefix+plugin.messages.getString("removechunk.correct")
                     .replaceAll("%chunk_coords%",chunkCoords));
         }else{
-            Send.playerMessage(player,plugin.prefix+plugin.messages.getFile().getString("removechunk.inexist")
+            Send.playerMessage(player,plugin.prefix+plugin.messages.getString("removechunk.inexist")
                     .replaceAll("%chunk_coords%",chunkCoords));
         }
         loadChunkList();
     }
 
     public void loadChunkList(){
-        chunkStringList = plugin.data.getFile().getStringList("chunks-list");
+        chunkStringList = plugin.data.getStringList("chunks-list");
         List<Chunk> chunksFormated = new ArrayList<>();
         List<String[]> chunksSplited = new ArrayList<>();
         for(String chunkIndex : chunkStringList){
-            chunksFormated.add(unformatChunk(formatChunk(chunkIndex)));
-            chunksSplited.add(formatChunk(chunkIndex));
+            Chunk chunk = unformatChunk(formatChunk(chunkIndex));
+            if(chunk.getWorld() !=null){
+                chunksFormated.add(chunk);
+                chunksSplited.add(formatChunk(chunkIndex));
+            }
         }
         chunkList = chunksFormated;
         chunkListStringSplit = chunksSplited;
-    }
-
-    public void loadChunk(Chunk chunk){
-        String[] chunkKey = formatChunk(chunk);
-        Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).loadChunk(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]));
-        Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).setChunkForceLoaded(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]), true);
-        if(isChunkLoadLogsEnable()){
-            plugin.getLogger().info(Color.convert(plugin.logPrefix+plugin.messages.getFile().getString("logs.load").replaceAll("%chunk%", formatChunkString(chunk))));
-        }
     }
 
     public String[] formatChunk(Chunk chunk){
@@ -118,7 +126,7 @@ public class ChunkManager {
         return chunkSplited;
     }
 
-    public String formatChunkString(Chunk chunk){
+    public String formatStringChunk(Chunk chunk){
         return chunk.getX()+";"+chunk.getZ()+";"+chunk.getWorld().getName();
     }
 
@@ -128,6 +136,10 @@ public class ChunkManager {
 
     public Chunk unformatChunk(String[] chunkFormatedSplited){
         return Objects.requireNonNull(Bukkit.getServer().getWorld(chunkFormatedSplited[2])).getChunkAt(Integer.parseInt(chunkFormatedSplited[0]),Integer.parseInt(chunkFormatedSplited[1]));
+    }
+
+    public Chunk unformatChunk(String chunkFormated){
+        return unformatChunk(formatChunk(chunkFormated));
     }
 
     public List<String> getChunkStringList(){

@@ -8,9 +8,9 @@ public class Command_Reload {
     private ChunkLoader plugin = ChunkLoader.getChunkLoader();
 
     public void commandReload(Player player){
-        plugin.data.reloadFile();
-        plugin.messages.reloadFile();
+        plugin.data.reloadFileConfiguration();
+        plugin.messages.reloadFileConfiguration();
 
-        Send.playerMessage(player,plugin.prefix+plugin.messages.getFile().getString("chunkloader.reload"));
+        Send.playerMessage(player,plugin.prefix+plugin.messages.getString("chunkloader.reload"));
     }
 }

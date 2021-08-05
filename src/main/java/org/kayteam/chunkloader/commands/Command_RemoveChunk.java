@@ -7,7 +7,6 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.kayteam.chunkloader.main.ChunkLoader;
 import org.kayteam.chunkloader.util.Send;
@@ -19,11 +18,9 @@ public class Command_RemoveChunk implements CommandExecutor {
         if(sender instanceof Player){
             Player player = (Player) sender;
             if(!player.hasPermission("chunkloader.removechunk ")){
-                Send.playerMessage(player, plugin.messages.getFile().getString("command.no-permissions"));
+                Send.playerMessage(player, plugin.messages.getString("command.no-permissions"));
                 return false;
             }
-            FileConfiguration data = plugin.data.getFile();
-            FileConfiguration messages = plugin.messages.getFile();
             Location playerLocation = player.getLocation();
             Chunk chunkLocation = playerLocation.getChunk();
             World chunkLocationWorld = chunkLocation.getWorld();
@@ -33,18 +30,18 @@ public class Command_RemoveChunk implements CommandExecutor {
             String chunkCoords = "X: "+chunkLocationX+"; Z:"+chunkLocationZ;
             String dataChunkPath = chunkLocationWorld.getName()+chunkLocationX+chunkLocationZ;
 
-            if(data.getConfigurationSection(dataChunkPath)!=null){
-                data.set(dataChunkPath,null);
-                plugin.data.saveFile();
+            if(plugin.data.getFileConfiguration().getConfigurationSection(dataChunkPath)!=null){
+                plugin.data.set(dataChunkPath,null);
+                plugin.data.saveFileConfiguration();
 
 
                 Bukkit.getWorld(chunkLocationWorld.getName()).setChunkForceLoaded(chunkLocationX,chunkLocationZ,false);
 
-                Send.playerMessage(player,plugin.prefix+messages.getString("removechunk.correct")
+                Send.playerMessage(player,plugin.prefix+plugin.messages.getString("removechunk.correct")
                         .replaceAll("%chunk_coords%",chunkCoords));
             }else{
 
-                Send.playerMessage(player,plugin.prefix+messages.getString("removechunk.inexist")
+                Send.playerMessage(player,plugin.prefix+plugin.messages.getString("removechunk.inexist")
                         .replaceAll("%chunk_coords%",chunkCoords));
             }
         }

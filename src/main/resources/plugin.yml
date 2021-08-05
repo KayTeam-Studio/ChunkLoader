@@ -1,6 +1,6 @@
 name: ChunkLoader
 main: org.kayteam.chunkloader.main.ChunkLoader
-version: 2.5
+version: 2.6
 author: segu23
 api-version: 1.13
 commands:

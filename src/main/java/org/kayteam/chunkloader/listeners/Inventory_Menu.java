@@ -50,7 +50,7 @@ public class Inventory_Menu implements Listener {
                         }else if(event.getClick().isRightClick()){
                             closeInventory(player);
                             menu.openChunkListMenu(player, getPage(event.getView().getTitle()));
-                            chunkManager.deleteChunk(chunkManager.getChunkStringList().get((getPage(event.getView().getTitle())-1)*45+event.getRawSlot()), player);
+                            chunkManager.deleteChunk(chunkManager.unformatChunk(chunkManager.formatChunk(chunkManager.getChunkStringList().get((getPage(event.getView().getTitle())-1)*45+event.getRawSlot()))), player);
                         }
                     }else if(clickedItem.equals(menu.nextPageItem)){
                         menu.openChunkListMenu(player, getPage(event.getView().getTitle())+1);
@@ -60,19 +60,19 @@ public class Inventory_Menu implements Listener {
                 }else if(plugin.getPlayersInMenu().get(player).equals(Menu.ADMIN_SECTION)){
                     if(clickedItem.equals(menu.turnOnChunkLoadItem)){
                         chunkManager.enableChunkLoad();
-                        Send.playerMessage(player,plugin.prefix+plugin.messages.getFile().getString("chunkloader.enabled"));
+                        Send.playerMessage(player,plugin.prefix+plugin.messages.getString("chunkloader.enabled"));
                         player.closeInventory();
                     }else if(clickedItem.equals(menu.turnOffChunkLoadItem)){
                         chunkManager.disableChunkLoad();
-                        Send.playerMessage(player,plugin.prefix+plugin.messages.getFile().getString("chunkloader.disabled"));
+                        Send.playerMessage(player,plugin.prefix+plugin.messages.getString("chunkloader.disabled"));
                         player.closeInventory();
                     }else if(clickedItem.equals(menu.turnOnChunkLoadLogsItem)){
                         chunkManager.setChunkLoadLogs(true);
-                        Send.playerMessage(player,plugin.prefix+plugin.messages.getFile().getString("logs.enabled"));
+                        Send.playerMessage(player,plugin.prefix+plugin.messages.getString("logs.enabled"));
                         player.closeInventory();
                     }else if(clickedItem.equals(menu.turnOffChunkLoadLogsItem)){
                         chunkManager.setChunkLoadLogs(false);
-                        Send.playerMessage(player,plugin.prefix+plugin.messages.getFile().getString("logs.disabled"));
+                        Send.playerMessage(player,plugin.prefix+plugin.messages.getString("logs.disabled"));
                         player.closeInventory();
                     }
                 }

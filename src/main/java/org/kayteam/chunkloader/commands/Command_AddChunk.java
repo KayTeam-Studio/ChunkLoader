@@ -22,22 +22,22 @@ public class Command_AddChunk implements CommandExecutor {
             ChunkManager chunkManager = plugin.getChunkManager();
             Player player = (Player) sender;
             if(!player.hasPermission("chunkloader.addchunk ")){
-                Send.playerMessage(player, plugin.messages.getFile().getString("command.no-permissions"));
+                Send.playerMessage(player, plugin.messages.getString("command.no-permissions"));
                 return false;
             }
-            FileConfiguration data = plugin.data.getFile();
-            FileConfiguration messages = plugin.messages.getFile();
+            FileConfiguration data = plugin.data.getFileConfiguration();
+            FileConfiguration messages = plugin.messages.getFileConfiguration();
             Location playerLocation = player.getLocation();
             Chunk chunkLocation = playerLocation.getChunk();
             String chunkCoords = "X: "+chunkLocation.getX()+"; Z:"+chunkLocation.getZ();
-            String chunkFormated = chunkManager.formatChunkString(chunkLocation);
+            String chunkFormated = chunkManager.formatStringChunk(chunkLocation);
 
             if(!data.getStringList("chunks-list").contains(chunkFormated)){
                 List<String> chunkList = data.getStringList("chunks-list");
                 chunkList.add(chunkFormated);
                 data.set("chunks-list", chunkList);
                 chunkManager.getChunkStringList().add(chunkFormated);
-                plugin.data.saveFile();
+                plugin.data.saveFileConfiguration();
 
                 chunkLocation.setForceLoaded(true);
 
