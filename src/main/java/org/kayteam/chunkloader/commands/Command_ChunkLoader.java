@@ -5,52 +5,59 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.kayteam.chunkloader.main.ChunkLoader;
-import org.kayteam.chunkloader.util.Send;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Command_ChunkLoader implements CommandExecutor, TabCompleter {
-    private ChunkLoader plugin = ChunkLoader.getChunkLoader();
 
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    private final ChunkLoader plugin;
+
+    public Command_ChunkLoader(ChunkLoader plugin) {
+        this.plugin = plugin;
+    }
+
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
         if(sender instanceof Player){
             Player player = (Player) sender;
             if(!player.hasPermission("chunkloader.chunkloader ")){
-                Send.playerMessage(player, plugin.messages.getString("command.no-permissions"));
+                plugin.messages.sendMessage(player, "command.no-permissions");
                 return false;
             }
             if(args.length>0){
                 if(args[0].equalsIgnoreCase("help")){
-                    new Command_Help().chunkHelp(player);
+                    new Command_Help(plugin).chunkHelp(player);
                 }else if(args[0].equalsIgnoreCase("list")){
-                    new Command_List().chunkList(player);
+                    new Command_List(plugin).chunkList(player);
                 }else if(args[0].equalsIgnoreCase("reload")){
-                    new Command_Reload().commandReload(player);
+                    new Command_Reload(plugin).commandReload(player);
                 }else if(args[0].equalsIgnoreCase("on")){
-                    new Command_On().enableChunkLoad(player);
+                    new Command_On(plugin).enableChunkLoad(player);
                 }else if(args[0].equalsIgnoreCase("off")){
-                    new Command_Off().disableChunkLoad(player);
+                    new Command_Off(plugin).disableChunkLoad(player);
                 }else if(args[0].equalsIgnoreCase("tp")){
                     if(args.length>1){
-                        new Command_TP().chunkTeleport(player,args[1]);
+                        try{
+                            new Command_TP(plugin).chunkTeleport(player,Integer.parseInt(args[1]));
+                        }catch (Exception ignored){}
                     }else{
-                        Send.playerMessage(player,plugin.prefix+"&c/cl tp <list-number>");
+                        plugin.messages.sendSimpleMessage(player, "&c/cl tp <list-number>");
                     }
                 }else if(args[0].equalsIgnoreCase("menu")){
-                    plugin.CMD_Menu.openMainMenu(player);
+                    new Command_Menu(plugin).openMenu(player);
                 }else{
-                    new Command_Help().chunkHelp(player);
+                    new Command_Help(plugin).chunkHelp(player);
                 }
             }else{
-                new Command_Help().chunkHelp(player);
+                new Command_Help(plugin).chunkHelp(player);
             }
         }
         return false;
     }
 
-    public List<String> onTabComplete(CommandSender s, Command c, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender s, @NotNull Command c, @NotNull String label, String[] args) {
         ArrayList<String> tabs = new ArrayList<>();
         if(args.length == 1){
             tabs.add("help");
@@ -65,7 +72,7 @@ public class Command_ChunkLoader implements CommandExecutor, TabCompleter {
         if(args.length == 2){
             if(args[0].equals("tp")){
                 for(int i = 0; i < plugin.getChunkManager().getChunkStringList().size(); i++){
-                    tabs.add(String.valueOf(i+1));
+                    tabs.add(String.valueOf(i));
                 }
             return tabs;
             }

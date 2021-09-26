@@ -1,24 +1,23 @@
 package org.kayteam.chunkloader.main;
 
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kayteam.chunkloader.commands.Command_AddChunk;
 import org.kayteam.chunkloader.commands.Command_ChunkLoader;
-import org.kayteam.chunkloader.commands.Command_Menu;
 import org.kayteam.chunkloader.commands.Command_RemoveChunk;
 import org.kayteam.chunkloader.listeners.ChunkUnload;
-import org.kayteam.chunkloader.listeners.Inventory_Menu;
 import org.kayteam.chunkloader.listeners.OPJoin;
-import org.kayteam.chunkloader.menus.Menu;
-import org.kayteam.chunkloader.util.*;
+import org.kayteam.chunkloader.util.Color;
+import org.kayteam.kayteamapi.BrandSender;
+import org.kayteam.kayteamapi.bStats.Metrics;
+import org.kayteam.kayteamapi.inventory.InventoryManager;
+import org.kayteam.kayteamapi.updatechecker.UpdateChecker;
+import org.kayteam.kayteamapi.yaml.Yaml;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 public class ChunkLoader extends JavaPlugin {
 
-    public static ChunkLoader chunkLoader;
-    public ChunkManager chunkManager;
+    private ChunkManager chunkManager;
 
     public Yaml messages;
     public Yaml messages_es = new Yaml(this, "messages_es");
@@ -26,20 +25,12 @@ public class ChunkLoader extends JavaPlugin {
     public Yaml data = new Yaml(this,"data");
     public Yaml config = new Yaml(this,"config");
 
-    public String prefix;
     public final String logPrefix = "&2Chunk&aLoader &7>> &f";
     private String lang;
-    private Map<Player, Menu> playersInMenu = new HashMap<>();
-
-    public Command_Menu CMD_Menu;
-
-    public boolean newUpdate = false;
 
     @Override
     public void onEnable() {
-        chunkLoader = this;
-        chunkManager = new ChunkManager();
-        KayTeam.sendBrandMessage(this, "&aEnabled");
+        chunkManager = new ChunkManager(this);
         enablePluginUpdateChecker();
         checkPaper();
         registerFiles();
@@ -49,12 +40,13 @@ public class ChunkLoader extends JavaPlugin {
         enableBStats();
         registerListeners();
         loadAll();
+        BrandSender.sendBrandMessage(this, "&aEnabled");
     }
 
     private void loadConfig(){
         chunkManager.chunkLoad = config.getBoolean("chunk-load", true);
+        chunkManager.chunkLoadLogs = config.getBoolean("log-chunk-load", true);
         lang = config.getString("lang", "en");
-        prefix = config.getString("plugin-prefix", "&2&lChunk&a&lLoader &8&l> ");
         chunkManager.loadChunkList();
     }
 
@@ -91,30 +83,26 @@ public class ChunkLoader extends JavaPlugin {
         return updateChecker;
     }
 
+    private final InventoryManager inventoryManager = new InventoryManager(this);
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
+    }
+
     private void enableBStats(){
         int pluginId = 	12091;
-        Metrics metrics = new Metrics(this, pluginId);
+        new Metrics(this, pluginId);
     }
 
     private void registerListeners(){
-        getServer().getPluginManager().registerEvents(new OPJoin(), this);
-        getServer().getPluginManager().registerEvents(new Inventory_Menu(), this);
-    }
-
-    public static ChunkLoader getChunkLoader(){
-        return chunkLoader;
-    }
-
-    public Map<Player, Menu> getPlayersInMenu(){
-        return playersInMenu;
+        getServer().getPluginManager().registerEvents(new OPJoin(this), this);
+        getServer().getPluginManager().registerEvents(inventoryManager, this);
     }
 
     private void loadAll(){
-        getServer().getPluginManager().registerEvents(new ChunkUnload(), this);
+        getServer().getPluginManager().registerEvents(new ChunkUnload(this), this);
         if(config.getBoolean("chunk-load")){
             chunkManager.enableChunkLoad();
         }
-        CMD_Menu = new Command_Menu();
     }
 
     private void checkPaper(){
@@ -128,14 +116,14 @@ public class ChunkLoader extends JavaPlugin {
 
 
     private void registerCommands() {
-        getCommand("addchunk").setExecutor(new Command_AddChunk());
-        getCommand("removechunk").setExecutor(new Command_RemoveChunk());
-        getCommand("chunkloader").setExecutor(new Command_ChunkLoader());
+        Objects.requireNonNull(getCommand("addchunk")).setExecutor(new Command_AddChunk(this));
+        Objects.requireNonNull(getCommand("removechunk")).setExecutor(new Command_RemoveChunk(this));
+        Objects.requireNonNull(getCommand("chunkloader")).setExecutor(new Command_ChunkLoader(this));
     }
 
     @Override
     public void onDisable() {
-        KayTeam.sendBrandMessage(this, "&cDisabled");
+        BrandSender.sendBrandMessage(this, "&cDisabled");
     }
 }
 

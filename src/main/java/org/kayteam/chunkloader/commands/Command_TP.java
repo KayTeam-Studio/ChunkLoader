@@ -1,43 +1,42 @@
 package org.kayteam.chunkloader.commands;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.kayteam.chunkloader.main.ChunkLoader;
-import org.kayteam.chunkloader.main.ChunkManager;
-import org.kayteam.chunkloader.util.Send;
 
 import java.util.List;
 
 public class Command_TP {
-    private ChunkLoader plugin = ChunkLoader.getChunkLoader();
+    private final ChunkLoader plugin;
 
-    public void chunkTeleport(Player player, String chunkNumber){
-        ChunkManager chunkManager = plugin.getChunkManager();
-        List<String> chunkList = plugin.data.getStringList("chunks-list");
+    public Command_TP(ChunkLoader plugin){
+        this.plugin = plugin;
+    }
+
+    public void chunkTeleport(Player player, int chunkIndex){
+        List<Chunk> chunkList = plugin.getChunkManager().getChunkList();
             try{
-                int chunkListNumber = Integer.valueOf(chunkNumber)-1;
-                String chunk = chunkList.get(chunkListNumber);
-                double chunkLocationX = Integer.parseInt(chunkManager.formatChunk(chunk)[0])*16+8;
-                Double chunkLocationX_Integer = chunkLocationX;
-                double chunkLocationZ = Integer.parseInt(chunkManager.formatChunk(chunk)[1])*16+8;
-                Double chunkLocationZ_Integer = chunkLocationZ;
-                World chunkLocationWorld = plugin.getServer().getWorld(chunkManager.formatChunk(chunk)[2]);
+                Chunk chunk = chunkList.get(chunkIndex);
+                double chunkLocationX = chunk.getX()*16+8;
+                double chunkLocationZ = chunk.getZ()*16+8;
+                World chunkLocationWorld = chunk.getWorld();
 
-                String chunkCoords = "X: "+plugin.data.getInt(chunkList.get(chunkListNumber)+".x")+
-                        "; Z:"+plugin.data.getInt(chunkList.get(chunkListNumber)+".z");
+                String chunkCoords = "X: "+chunk.getX()+"; Z:"+chunk.getZ();
 
-                Location chunkLocation = new Location(chunkLocationWorld,chunkLocationX,
-                        chunkLocationWorld.getHighestBlockYAt(chunkLocationX_Integer.intValue(), chunkLocationZ_Integer.intValue())+1,
-                        chunkLocationZ);
+                Location chunkLocation = new Location(
+                        chunkLocationWorld,chunkLocationX,chunkLocationWorld
+                        .getHighestBlockYAt((int) chunkLocationX, (int) chunkLocationZ)+1,chunkLocationZ);
 
-                Send.playerMessage(player,plugin.prefix+plugin.messages.getString("chunkloader.teleport")
-                        .replaceAll("%chunk_coords%",chunkCoords)
-                        .replaceAll("%chunk_world%",chunkLocationWorld.getName()));
+                plugin.messages.sendMessage(player, "chunkloader.teleport", new String[][]{
+                        {"%chunk_coords%",chunkCoords},
+                        {"%chunk_world%",chunkLocationWorld.getName()}
+                });
 
                 player.teleport(chunkLocation);
             }catch (Exception e){
-                Send.playerMessage(player, plugin.prefix+plugin.messages.getString("chunkloader.teleport-invalid"));
+                plugin.messages.sendMessage(player, "chunkloader.teleport-invalid");
             }
     }
 }

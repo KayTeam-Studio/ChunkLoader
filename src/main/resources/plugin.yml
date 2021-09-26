@@ -1,8 +1,9 @@
 name: ChunkLoader
 main: org.kayteam.chunkloader.main.ChunkLoader
-version: 2.6
+version: ${project.version}
 author: segu23
 api-version: 1.13
+website: https://kayteam.org
 commands:
   addchunk:
     description: AddChunk

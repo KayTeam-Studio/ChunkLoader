@@ -9,13 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Command_List {
-    private ChunkLoader plugin = ChunkLoader.getChunkLoader();
+
+    private final ChunkLoader plugin;
+
+    public Command_List(ChunkLoader plugin) {
+        this.plugin = plugin;
+    }
 
     public void chunkList(Player player){
         ChunkManager chunkManager = plugin.getChunkManager();
 
-        plugin.data.getStringList("chunks-list");
-        List<String> chunkList = new ArrayList<String>();
+        List<String> chunkList = new ArrayList<>();
         for(String key : plugin.data.getStringList("chunks-list")){
             int chunkLocationX = Integer.parseInt(chunkManager.formatChunk(key)[0]);
             int chunkLocationZ = Integer.parseInt(chunkManager.formatChunk(key)[1]);
@@ -23,12 +27,14 @@ public class Command_List {
 
             String chunkCoords = "X: "+chunkLocationX+"; Z: "+chunkLocationZ;
 
-            chunkList.add(plugin.messages.getString("chunkloader.list")
-                    .replaceAll("%chunk_coords%",chunkCoords)
-                    .replaceAll("%chunk_world%",chunkLocationWorld));
+            chunkList.add(plugin.messages.getString("chunkloader.list", new String[][]{
+                    {"%chunk_coords%", chunkCoords},
+                    {"%chunk_world%", chunkLocationWorld}
+                })
+            );
         }
         for (int i = 0; i < chunkList.size(); i++) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7(&l"+(i+1)+"&7)"+chunkList.get(i)));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7(&l"+(i)+"&7)"+chunkList.get(i)));
         }
     }
 }

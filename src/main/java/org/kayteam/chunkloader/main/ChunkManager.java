@@ -5,7 +5,6 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.kayteam.chunkloader.util.Color;
-import org.kayteam.chunkloader.util.Send;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +12,22 @@ import java.util.Objects;
 
 public class ChunkManager {
 
-    private ChunkLoader plugin = ChunkLoader.getChunkLoader();
+    private final ChunkLoader plugin;
 
     public boolean chunkLoad;
     public boolean chunkLoadLogs;
     private boolean isPaper = false;
-    public List<String> chunkStringList;
-    public List<Chunk> chunkList;
-    public List<String[]> chunkListStringSplit;
+    private List<String> chunkStringList;
+    private List<Chunk> chunkList;
+    private List<String[]> chunkListStringSplit;
+
+    public ChunkManager(ChunkLoader plugin) {
+        this.plugin = plugin;
+    }
+
+    public boolean isPaper() {
+        return isPaper;
+    }
 
     public void setPaperState(boolean state){
         this.isPaper = state;
@@ -31,11 +38,11 @@ public class ChunkManager {
         }
     }
 
-    public boolean isChunkLoadEnable(){
+    public boolean isChunkLoad(){
         return chunkLoad;
     }
 
-    public boolean isChunkLoadLogsEnable(){
+    public boolean isChunkLoadLogs(){
         return chunkLoadLogs;
     }
 
@@ -47,10 +54,10 @@ public class ChunkManager {
 
     public void loadChunk(Chunk chunk){
         String[] chunkKey = formatChunk(chunk);
-        if(chunk.getWorld() != null){
+        if(plugin.getServer().getWorlds().contains(chunk.getWorld())){
             Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).loadChunk(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]));
             Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).setChunkForceLoaded(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]), true);
-            if(isChunkLoadLogsEnable()){
+            if(isChunkLoadLogs()){
                 plugin.getLogger().info(Color.convert(plugin.logPrefix+plugin.messages.getString("logs.load").replaceAll("%chunk%", formatStringChunk(chunk))));
             }
         }
@@ -76,29 +83,26 @@ public class ChunkManager {
 
     public void unloadChunk(Chunk chunk){
         String[] chunkFormated = formatChunk(chunk);
-        Bukkit.getWorld(chunkFormated[2]).getChunkAt(Integer.parseInt(chunkFormated[0]), Integer.parseInt(chunkFormated[1])).setForceLoaded(false);
-        if(isChunkLoadLogsEnable()){
-            plugin.getLogger().info(Color.convert(plugin.logPrefix+plugin.messages.getString("logs.unload").replaceAll("%chunk%", formatStringChunk(chunk))));
+        Objects.requireNonNull(Bukkit.getWorld(chunkFormated[2])).getChunkAt(Integer.parseInt(chunkFormated[0]), Integer.parseInt(chunkFormated[1])).setForceLoaded(false);
+        if(isChunkLoadLogs()){
+            plugin.getLogger().info(Color.convert(plugin.logPrefix+plugin.messages.getString("logs.unload", new String[][]{{"%chunk%", formatStringChunk(chunk)}})));
         }
     }
 
     public void deleteChunk(Chunk chunk, Player player){
-        Chunk chunkLocation = unformatChunk(formatChunk(chunk));
-        World chunkLocationWorld = chunkLocation.getWorld();
-        int chunkLocationX = chunkLocation.getX();
-        int chunkLocationZ = chunkLocation.getZ();
+        World chunkLocationWorld = chunk.getWorld();
+        int chunkLocationX = chunk.getX();
+        int chunkLocationZ = chunk.getZ();
         String chunkCoords = "X: "+chunkLocationX+"; Z:"+chunkLocationZ;
-        if(plugin.getChunkManager().getChunkList().contains(chunkLocation)){
-            List<String> chunkList = plugin.data.getStringList("chunks-list");
-            chunkList.remove(chunk);
-            plugin.data.set("chunks-list", chunkList);
+        if(chunkList.contains(chunk)){
+            List <String> chunkStringList = plugin.data.getStringList("chunks-list");
+            chunkStringList.remove(formatStringChunk(chunk));
+            plugin.data.set("chunks-list", chunkStringList);
             plugin.data.saveFileConfiguration();
-            Bukkit.getWorld(chunkLocationWorld.getName()).setChunkForceLoaded(chunkLocationX,chunkLocationZ,false);
-            Send.playerMessage(player,plugin.prefix+plugin.messages.getString("removechunk.correct")
-                    .replaceAll("%chunk_coords%",chunkCoords));
+            Objects.requireNonNull(Bukkit.getWorld(chunkLocationWorld.getName())).setChunkForceLoaded(chunkLocationX,chunkLocationZ,false);
+            plugin.messages.sendMessage(player,"removechunk.correct", new String[][]{{"%chunk_coords%",chunkCoords}});
         }else{
-            Send.playerMessage(player,plugin.prefix+plugin.messages.getString("removechunk.inexist")
-                    .replaceAll("%chunk_coords%",chunkCoords));
+            plugin.messages.sendMessage(player,"removechunk.inexist", new String[][]{{"%chunk_coords%",chunkCoords}});
         }
         loadChunkList();
     }
@@ -108,8 +112,8 @@ public class ChunkManager {
         List<Chunk> chunksFormated = new ArrayList<>();
         List<String[]> chunksSplited = new ArrayList<>();
         for(String chunkIndex : chunkStringList){
-            Chunk chunk = unformatChunk(formatChunk(chunkIndex));
-            if(chunk.getWorld() !=null){
+            Chunk chunk = unformatChunk(chunkIndex);
+            if(plugin.getServer().getWorlds().contains(chunk.getWorld())){
                 chunksFormated.add(chunk);
                 chunksSplited.add(formatChunk(chunkIndex));
             }

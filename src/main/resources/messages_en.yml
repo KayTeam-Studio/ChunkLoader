@@ -1,27 +1,27 @@
 command:
-  only-player: '&cThis command can only be executed by one player.'
-  no-permissions: "&cSorry, you don't have permissions to execute this command."
+  only-player: '&2&lChunk&a&lLoader &8&l> &f&cThis command can only be executed by one player.'
+  no-permissions: "&2&lChunk&a&lLoader &8&l> &f&cSorry, you don't have permissions to execute this command."
 addchunk:
-  correct: '&aChunk &7%chunk_coords% &ahas been successfully registered.'
-  exist: '&cChunk &7%chunk_coords% &cis already registered.'
+  correct: '&2&lChunk&a&lLoader &8&l> &f&aChunk &7%chunk_coords% &ahas been registered successfully.'
+  exist: '&2&lChunk&a&lLoader &8&l> &f&cChunk &7%chunk_coords% &cis already registered.'
 logs:
-  load: '&aChunk &7%chunk% &awas loaded correctly.'
-  unload: '&cChunk &7%chunk% &cwas unloaded correctly.'
-  messages: '&7%lang% &afile was loaded successfully.'
-  messages-error: '&cThere was an error trying to load the file &7%lang%&c.'
-  enabled: '&aChunk load logs enabled.'
-  disabled: '&cChunk load logs disabled'
+  load: '&2&lChunk&a&lLoader &8&l> &f&aChunk &7%chunk% &awas loaded correctly.'
+  unload: '&2&lChunk&a&lLoader &8&l> &f&cChunk &7%chunk% &cwas unloaded correctly.'
+  messages: '&2&lChunk&a&lLoader &8&l> &f&7%lang% &afile was loaded successfully.'
+  messages-error: '&2&lChunk&a&lLoader &8&l> &f&cThere was an error trying to load the file &7%lang%&c.'
+  enabled: '&2&lChunk&a&lLoader &8&l> &f&aChunk load logs enabled.'
+  disabled: '&2&lChunk&a&lLoader &8&l> &f&cChunk load logs disabled'
 removechunk:
-  correct: '&aChunk &7%chunk_coords% &awas successfully unregistered.'
-  inexist: '&cChunk &7%chunk_coords% &cnot registered.'
+  correct: '&2&lChunk&a&lLoader &8&l> &f&aChunk &7%chunk_coords% &awas unregistered successfully.'
+  inexist: '&2&lChunk&a&lLoader &8&l> &f&cChunk &7%chunk_coords% &cnot registered.'
 chunkloader:
-  enabled: '&fChunk loading has been activated.'
-  already-enabled: '&cChunk loading is already activated.'
-  disabled: '&fChunk loading has been disabled.'
-  already-disabled: '&cChunk loading is already disabled.'
-  reload: '&fConfiguration was reloaded correctly.'
-  teleport: '&aYou have teleported to the chunk &7%chunk_coords% - %chunk_world%&a.'
-  teleport-invalid: '&cThe entered chunk  is invalid, use &7/cl list&c.'
+  enabled: '&2&lChunk&a&lLoader &8&l> &f&fChunk loading has been activated.'
+  already-enabled: '&2&lChunk&a&lLoader &8&l> &f&cChunk loading is already activated.'
+  disabled: '&2&lChunk&a&lLoader &8&l> &f&fChunk loading has been disabled.'
+  already-disabled: '&2&lChunk&a&lLoader &8&l> &f&cChunk loading is already disabled.'
+  reload: '&2&lChunk&a&lLoader &8&l> &f&fConfiguration was reloaded correctly.'
+  teleport: '&2&lChunk&a&lLoader &8&l> &f&aYou have teleported to the chunk &7%chunk_coords% - %chunk_world%&a.'
+  teleport-invalid: '&2&lChunk&a&lLoader &8&l> &f&cThe entered chunk is invalid, use &7/cl list&c.'
   help:
     - '&2&lChunk&a&lLoader &fplugin by segu23'
     - ''
@@ -35,4 +35,4 @@ chunkloader:
     - ' &8» &6/addchunk&f: Add the current chunk to the registry.'
     - ' &8» &6/removechunk&f: Delete the current chunk of the registry.'
   list: ' &8» &7%chunk_coords% - %chunk_world%'
-  list-null: '&cThere is no registered chunk.'
+  list-null: '&2&lChunk&a&lLoader &8&l> &f&cThere is no registered chunk.'

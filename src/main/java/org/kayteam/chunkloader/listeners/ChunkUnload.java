@@ -9,7 +9,11 @@ import org.kayteam.chunkloader.main.ChunkManager;
 
 public class ChunkUnload implements Listener {
 
-    private ChunkLoader plugin = ChunkLoader.getChunkLoader();
+    private final ChunkLoader plugin;
+
+    public ChunkUnload(ChunkLoader plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onUnload(ChunkUnloadEvent event){
@@ -19,7 +23,7 @@ public class ChunkUnload implements Listener {
         chunk[2] = event.getChunk().getWorld().getName();
         ChunkManager chunkManager = plugin.getChunkManager();
         if(chunkManager.getChunkListStringSplit().contains(chunk)){
-            if(chunkManager.isChunkLoadEnable()){
+            if(chunkManager.isChunkLoad()){
                 chunkManager.loadChunk(event.getChunk());
             }
         }
