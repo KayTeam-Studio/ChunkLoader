@@ -13,11 +13,7 @@ public class Color {
     }
 
     public static String convert(String message){
-        try{
-            return ChatColor.translateAlternateColorCodes('&',message);
-        }catch (Exception e){
-            return message;
-        }
+        return ChatColor.translateAlternateColorCodes('&',message);
     }
 
     public static List<String> convert(List<String> message){

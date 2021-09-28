@@ -14,6 +14,7 @@ public class Command_Reload {
     public void commandReload(Player player){
         plugin.data.reloadFileConfiguration();
         plugin.messages.reloadFileConfiguration();
+        plugin.config.registerFileConfiguration();
         plugin.messages.sendMessage(player, "chunkloader.reload");
     }
 }

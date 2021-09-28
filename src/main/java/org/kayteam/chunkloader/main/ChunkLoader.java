@@ -6,7 +6,6 @@ import org.kayteam.chunkloader.commands.Command_ChunkLoader;
 import org.kayteam.chunkloader.commands.Command_RemoveChunk;
 import org.kayteam.chunkloader.listeners.ChunkUnload;
 import org.kayteam.chunkloader.listeners.OPJoin;
-import org.kayteam.chunkloader.util.Color;
 import org.kayteam.kayteamapi.BrandSender;
 import org.kayteam.kayteamapi.bStats.Metrics;
 import org.kayteam.kayteamapi.inventory.InventoryManager;
@@ -47,7 +46,6 @@ public class ChunkLoader extends JavaPlugin {
         chunkManager.chunkLoad = config.getBoolean("chunk-load", true);
         chunkManager.chunkLoadLogs = config.getBoolean("log-chunk-load", true);
         lang = config.getString("lang", "en");
-        chunkManager.loadChunkList();
     }
 
     public ChunkManager getChunkManager(){
@@ -58,9 +56,9 @@ public class ChunkLoader extends JavaPlugin {
         try{
             messages = new Yaml(this,"messages_"+ lang);
             messages.registerFileConfiguration();
-            getLogger().info(Color.convert(logPrefix+messages.getString("logs.messages").replaceAll("%lang%", "messages_"+lang)));
+            Yaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages"), new String[][]{{"%lang%", "messages_"+lang}});
         }catch (Exception e){
-            getLogger().info(Color.convert(logPrefix+messages_en.getString("logs.messages-error").replaceAll("%lang%", "messages_"+lang)));
+            Yaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages-error"), new String[][]{{"%lang%", "messages_"+lang}});
         }
     }
 
@@ -94,13 +92,13 @@ public class ChunkLoader extends JavaPlugin {
     }
 
     private void registerListeners(){
+        getServer().getPluginManager().registerEvents(new ChunkUnload(this), this);
         getServer().getPluginManager().registerEvents(new OPJoin(this), this);
         getServer().getPluginManager().registerEvents(inventoryManager, this);
     }
 
     private void loadAll(){
-        getServer().getPluginManager().registerEvents(new ChunkUnload(this), this);
-        if(config.getBoolean("chunk-load")){
+        if(chunkManager.isChunkLoad()){
             chunkManager.enableChunkLoad();
         }
     }

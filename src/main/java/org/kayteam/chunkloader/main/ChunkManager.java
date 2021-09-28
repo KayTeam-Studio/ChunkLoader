@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.kayteam.chunkloader.util.Color;
+import org.kayteam.kayteamapi.yaml.Yaml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +32,9 @@ public class ChunkManager {
     public void setPaperState(boolean state){
         this.isPaper = state;
         if(state){
-            plugin.getLogger().info(Color.convert(plugin.logPrefix+"&fEnabled Paper version."));
+            Yaml.sendSimpleMessage(plugin.getServer().getConsoleSender(), plugin.logPrefix+"&fEnabled Paper version.");
         }else{
-            plugin.getLogger().info(Color.convert(plugin.logPrefix+"&fEnabled Spigot version."));
+            Yaml.sendSimpleMessage(plugin.getServer().getConsoleSender(), plugin.logPrefix+"&fEnabled Spigot version.");
         }
     }
 
@@ -53,17 +53,25 @@ public class ChunkManager {
     }
 
     public void loadChunk(Chunk chunk){
-        String[] chunkKey = formatChunk(chunk);
         if(plugin.getServer().getWorlds().contains(chunk.getWorld())){
-            Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).loadChunk(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]));
-            Objects.requireNonNull(Bukkit.getServer().getWorld(chunkKey[2])).setChunkForceLoaded(Integer.parseInt(chunkKey[0]),Integer.parseInt(chunkKey[1]), true);
+                Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            chunk.setForceLoaded(true);
+                        }catch (NoSuchMethodError e){
+                            chunk.load();
+                        }
+                    }
+                },1);
             if(isChunkLoadLogs()){
-                plugin.getLogger().info(Color.convert(plugin.logPrefix+plugin.messages.getString("logs.load").replaceAll("%chunk%", formatStringChunk(chunk))));
+                Yaml.sendSimpleMessage(plugin.getServer().getConsoleSender(), plugin.messages.getString("logs.load"), new String[][]{{"%chunk%", formatStringChunk(chunk)}});
             }
         }
     }
 
     public void enableChunkLoad() {
+        loadChunkList();
         plugin.config.set("chunk-load", true);
         plugin.config.saveFileConfiguration();
         chunkLoad = true;
@@ -82,10 +90,13 @@ public class ChunkManager {
     }
 
     public void unloadChunk(Chunk chunk){
-        String[] chunkFormated = formatChunk(chunk);
-        Objects.requireNonNull(Bukkit.getWorld(chunkFormated[2])).getChunkAt(Integer.parseInt(chunkFormated[0]), Integer.parseInt(chunkFormated[1])).setForceLoaded(false);
+        try{
+            chunk.setForceLoaded(false);
+        }catch (NoSuchMethodError e){
+            chunk.unload();
+        }
         if(isChunkLoadLogs()){
-            plugin.getLogger().info(Color.convert(plugin.logPrefix+plugin.messages.getString("logs.unload", new String[][]{{"%chunk%", formatStringChunk(chunk)}})));
+            Yaml.sendSimpleMessage(plugin.getServer().getConsoleSender(), plugin.messages.getString("logs.unload"), new String[][]{{"%chunk%", formatStringChunk(chunk)}});
         }
     }
 
@@ -99,7 +110,7 @@ public class ChunkManager {
             chunkStringList.remove(formatStringChunk(chunk));
             plugin.data.set("chunks-list", chunkStringList);
             plugin.data.saveFileConfiguration();
-            Objects.requireNonNull(Bukkit.getWorld(chunkLocationWorld.getName())).setChunkForceLoaded(chunkLocationX,chunkLocationZ,false);
+            unloadChunk(chunk);
             plugin.messages.sendMessage(player,"removechunk.correct", new String[][]{{"%chunk_coords%",chunkCoords}});
         }else{
             plugin.messages.sendMessage(player,"removechunk.inexist", new String[][]{{"%chunk_coords%",chunkCoords}});
@@ -121,7 +132,6 @@ public class ChunkManager {
         chunkList = chunksFormated;
         chunkListStringSplit = chunksSplited;
     }
-
     public String[] formatChunk(Chunk chunk){
         String[] chunkSplited = new String[3];
         chunkSplited[0] = String.valueOf(chunk.getX());

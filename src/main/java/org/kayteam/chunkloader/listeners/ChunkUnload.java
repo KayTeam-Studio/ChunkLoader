@@ -17,12 +17,8 @@ public class ChunkUnload implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onUnload(ChunkUnloadEvent event){
-        String[] chunk = new String[3];
-        chunk[0] = String.valueOf(event.getChunk().getX());
-        chunk[1] = String.valueOf(event.getChunk().getZ());
-        chunk[2] = event.getChunk().getWorld().getName();
         ChunkManager chunkManager = plugin.getChunkManager();
-        if(chunkManager.getChunkListStringSplit().contains(chunk)){
+        if(chunkManager.getChunkStringList().contains(chunkManager.formatStringChunk(event.getChunk()))){
             if(chunkManager.isChunkLoad()){
                 chunkManager.loadChunk(event.getChunk());
             }

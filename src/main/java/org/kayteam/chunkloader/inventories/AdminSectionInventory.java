@@ -22,14 +22,14 @@ public class AdminSectionInventory extends InventoryBuilder {
             addItem(11, () -> config.getItemStack("menu.admin-section.items.turn-off-chunk-load"));
             addLeftAction(11, ((player, i) -> {
                 plugin.getChunkManager().disableChunkLoad();
-                player.closeInventory();
+                plugin.getInventoryManager().openInventory(player, new AdminSectionInventory(plugin));
                 plugin.messages.sendMessage(player, "chunkloader.disabled");
             }));
         }else{
             addItem(11, () -> config.getItemStack("menu.admin-section.items.turn-on-chunk-load"));
             addLeftAction(11, ((player, i) -> {
                 plugin.getChunkManager().enableChunkLoad();
-                player.closeInventory();
+                plugin.getInventoryManager().openInventory(player, new AdminSectionInventory(plugin));
                 plugin.messages.sendMessage(player, "chunkloader.enabled");
             }));
         }
@@ -38,14 +38,14 @@ public class AdminSectionInventory extends InventoryBuilder {
             addItem(15, () -> config.getItemStack("menu.admin-section.items.turn-off-chunk-load-logs"));
             addLeftAction(15, ((player, i) -> {
                 plugin.getChunkManager().setChunkLoadLogs(false);
-                player.closeInventory();
+                plugin.getInventoryManager().openInventory(player, new AdminSectionInventory(plugin));
                 plugin.messages.sendMessage(player, "logs.disabled");
             }));
         }else{
             addItem(15, () -> config.getItemStack("menu.admin-section.items.turn-on-chunk-load-logs"));
             addLeftAction(15, ((player, i) -> {
                 plugin.getChunkManager().setChunkLoadLogs(true);
-                player.closeInventory();
+                plugin.getInventoryManager().openInventory(player, new AdminSectionInventory(plugin));
                 plugin.messages.sendMessage(player, "logs.enabled");
             }));
         }
