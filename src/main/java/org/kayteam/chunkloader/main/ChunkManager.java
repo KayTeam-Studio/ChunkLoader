@@ -58,9 +58,9 @@ public class ChunkManager {
                     @Override
                     public void run() {
                         try{
-                            chunk.setForceLoaded(true);
+                            chunk.getWorld().setChunkForceLoaded(chunk.getX(), chunk.getZ(), true);
                         }catch (NoSuchMethodError e){
-                            chunk.load();
+                            chunk.getWorld().loadChunk(chunk.getX(), chunk.getZ());
                         }
                     }
                 },1);
@@ -91,9 +91,9 @@ public class ChunkManager {
 
     public void unloadChunk(Chunk chunk){
         try{
-            chunk.setForceLoaded(false);
+            chunk.getWorld().setChunkForceLoaded(chunk.getX(), chunk.getZ(), false);
         }catch (NoSuchMethodError e){
-            chunk.unload();
+            chunk.getWorld().unloadChunk(chunk);
         }
         if(isChunkLoadLogs()){
             Yaml.sendSimpleMessage(plugin.getServer().getConsoleSender(), plugin.messages.getString("logs.unload"), new String[][]{{"%chunk%", formatStringChunk(chunk)}});

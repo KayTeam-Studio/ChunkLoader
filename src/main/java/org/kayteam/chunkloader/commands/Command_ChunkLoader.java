@@ -22,7 +22,7 @@ public class Command_ChunkLoader implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
         if(sender instanceof Player){
             Player player = (Player) sender;
-            if(!player.hasPermission("chunkloader.chunkloader ")){
+            if(!player.hasPermission("chunkloader.chunkloader")){
                 plugin.messages.sendMessage(player, "command.no-permissions");
                 return false;
             }
