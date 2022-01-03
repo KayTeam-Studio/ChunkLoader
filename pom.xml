@@ -6,7 +6,7 @@
 
     <groupId>segu23</groupId>
     <artifactId>ChunkLoader</artifactId>
-    <version>2.9</version>
+    <version>3.0</version>
 
     <build>
         <plugins>

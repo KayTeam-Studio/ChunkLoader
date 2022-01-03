@@ -13,7 +13,6 @@ commands:
     permission: chunkloader.removechunk
   chunkloader:
     description: ChunkLoader
-    permission: chunkloader.chunkloader
     aliases:
       - cl
       - cloader
@@ -23,4 +22,9 @@ permissions:
     children:
       chunkloader.addchunk: true
       chunkloader.removechunk: true
-      chunkloader.chunkloader: true
+      chunkloader.list: true
+      chunkloader.tp: true
+      chunkloader.menu: true
+      chunkloader.on: true
+      chunkloader.off: true
+      chunkloader.reload: true
