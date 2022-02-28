@@ -4,6 +4,7 @@ version: ${project.version}
 author: segu23
 api-version: 1.13
 website: https://kayteam.org
+softdepend: [Multiverse-Core]
 commands:
   addchunk:
     description: AddChunk
