@@ -6,16 +6,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Command_ChunkLoader implements CommandExecutor, TabCompleter {
 
-    private final ChunkLoader plugin;
+    private final MiPlugin plugin;
 
-    public Command_ChunkLoader(ChunkLoader plugin) {
+    public Command_ChunkLoader(MiPlugin plugin) {
         this.plugin = plugin;
     }
 

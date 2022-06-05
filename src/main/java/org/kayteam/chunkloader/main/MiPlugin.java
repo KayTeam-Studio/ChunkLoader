@@ -1,6 +1,7 @@
 package org.kayteam.chunkloader.main;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.kayteam.chunkloader.commands.ComandoYoutube;
 import org.kayteam.chunkloader.commands.Command_AddChunk;
 import org.kayteam.chunkloader.commands.Command_ChunkLoader;
 import org.kayteam.chunkloader.commands.Command_RemoveChunk;
@@ -14,7 +15,7 @@ import org.kayteam.kayteamapi.yaml.Yaml;
 
 import java.util.Objects;
 
-public class ChunkLoader extends JavaPlugin {
+public class MiPlugin extends JavaPlugin {
 
     private ChunkManager chunkManager;
 
@@ -32,17 +33,17 @@ public class ChunkLoader extends JavaPlugin {
         chunkManager = new ChunkManager(this);
         enablePluginUpdateChecker();
         checkPaper();
-        registerFiles();
-        loadConfig();
-        loadMessages();
-        registerCommands();
+        registrarArcivos();
+        cargarConfig();
+        cargarMensajes();
+        registrarComandos();
         enableBStats();
-        registerListeners();
+        registrarEventos();
         loadAll();
         BrandSender.sendBrandMessage(this, "&aEnabled");
     }
 
-    private void loadConfig(){
+    private void cargarConfig(){
         chunkManager.chunkLoad = config.getBoolean("chunk-load", true);
         chunkManager.chunkLoadLogs = config.getBoolean("log-chunk-load", true);
         lang = config.getString("lang", "en");
@@ -52,7 +53,7 @@ public class ChunkLoader extends JavaPlugin {
         return chunkManager;
     }
 
-    private void loadMessages(){
+    private void cargarMensajes(){
         try{
             messages = new Yaml(this,"messages_"+ lang);
             messages.registerFileConfiguration();
@@ -62,7 +63,7 @@ public class ChunkLoader extends JavaPlugin {
         }
     }
 
-    private void registerFiles(){
+    private void registrarArcivos(){
         config.registerFileConfiguration();
         messages_es.registerFileConfiguration();
         messages_en.registerFileConfiguration();
@@ -91,7 +92,7 @@ public class ChunkLoader extends JavaPlugin {
         new Metrics(this, pluginId);
     }
 
-    private void registerListeners(){
+    private void registrarEventos(){
         getServer().getPluginManager().registerEvents(new ChunkUnload(this), this);
         getServer().getPluginManager().registerEvents(new OPJoin(this), this);
         getServer().getPluginManager().registerEvents(inventoryManager, this);
@@ -113,10 +114,11 @@ public class ChunkLoader extends JavaPlugin {
     }
 
 
-    private void registerCommands() {
+    private void registrarComandos() {
         Objects.requireNonNull(getCommand("addchunk")).setExecutor(new Command_AddChunk(this));
         Objects.requireNonNull(getCommand("removechunk")).setExecutor(new Command_RemoveChunk(this));
         Objects.requireNonNull(getCommand("chunkloader")).setExecutor(new Command_ChunkLoader(this));
+        getCommand("youtube").setExecutor(new ComandoYoutube(this));
     }
 
     @Override

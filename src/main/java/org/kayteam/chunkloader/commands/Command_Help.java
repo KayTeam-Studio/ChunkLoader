@@ -1,13 +1,13 @@
 package org.kayteam.chunkloader.commands;
 
 import org.bukkit.entity.Player;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 
 public class Command_Help {
 
-    private final ChunkLoader plugin;
+    private final MiPlugin plugin;
 
-    public Command_Help(ChunkLoader plugin) {
+    public Command_Help(MiPlugin plugin) {
         this.plugin = plugin;
     }
 

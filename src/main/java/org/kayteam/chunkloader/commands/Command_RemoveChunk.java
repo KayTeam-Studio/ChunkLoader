@@ -5,13 +5,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 
 public class Command_RemoveChunk implements CommandExecutor {
 
-    private final ChunkLoader plugin;
+    private final MiPlugin plugin;
 
-    public Command_RemoveChunk(ChunkLoader plugin) {
+    public Command_RemoveChunk(MiPlugin plugin) {
         this.plugin = plugin;
     }
 

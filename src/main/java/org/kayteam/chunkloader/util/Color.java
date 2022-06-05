@@ -1,14 +1,14 @@
 package org.kayteam.chunkloader.util;
 
 import org.bukkit.ChatColor;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Color {
-    private ChunkLoader plugin;
-    public void Color(ChunkLoader plugin){
+    private MiPlugin plugin;
+    public void Color(MiPlugin plugin){
         this.plugin = plugin;
     }
 

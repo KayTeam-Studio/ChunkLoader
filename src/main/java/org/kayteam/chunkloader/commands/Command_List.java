@@ -2,7 +2,7 @@ package org.kayteam.chunkloader.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 import org.kayteam.chunkloader.main.ChunkManager;
 
 import java.util.ArrayList;
@@ -10,9 +10,9 @@ import java.util.List;
 
 public class Command_List {
 
-    private final ChunkLoader plugin;
+    private final MiPlugin plugin;
 
-    public Command_List(ChunkLoader plugin) {
+    public Command_List(MiPlugin plugin) {
         this.plugin = plugin;
     }
 

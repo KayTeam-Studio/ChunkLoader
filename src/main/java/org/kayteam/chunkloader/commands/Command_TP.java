@@ -4,14 +4,14 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 
 import java.util.List;
 
 public class Command_TP {
-    private final ChunkLoader plugin;
+    private final MiPlugin plugin;
 
-    public Command_TP(ChunkLoader plugin){
+    public Command_TP(MiPlugin plugin){
         this.plugin = plugin;
     }
 

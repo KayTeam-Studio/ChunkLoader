@@ -4,14 +4,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 import org.kayteam.chunkloader.main.ChunkManager;
 
 public class ChunkUnload implements Listener {
 
-    private final ChunkLoader plugin;
+    private final MiPlugin plugin;
 
-    public ChunkUnload(ChunkLoader plugin) {
+    public ChunkUnload(MiPlugin plugin) {
         this.plugin = plugin;
     }
 

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 import org.kayteam.chunkloader.main.ChunkManager;
 import org.kayteam.kayteamapi.yaml.Yaml;
 
@@ -15,9 +15,9 @@ import java.util.List;
 
 public class Command_AddChunk implements CommandExecutor {
 
-    private final ChunkLoader plugin;
+    private final MiPlugin plugin;
 
-    public Command_AddChunk(ChunkLoader plugin) {
+    public Command_AddChunk(MiPlugin plugin) {
         this.plugin = plugin;
     }
 

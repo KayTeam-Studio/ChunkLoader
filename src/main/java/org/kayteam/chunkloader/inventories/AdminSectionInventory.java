@@ -1,12 +1,12 @@
 package org.kayteam.chunkloader.inventories;
 
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 import org.kayteam.kayteamapi.inventory.InventoryBuilder;
 import org.kayteam.kayteamapi.yaml.Yaml;
 
 public class AdminSectionInventory extends InventoryBuilder {
 
-    public AdminSectionInventory(ChunkLoader plugin) {
+    public AdminSectionInventory(MiPlugin plugin) {
         super(plugin.config.getString("menu.admin-section.title"), 4);
         Yaml config = plugin.config;
         // Fill

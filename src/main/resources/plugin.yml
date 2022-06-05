@@ -18,6 +18,10 @@ commands:
       - cl
       - cloader
       - chunkl
+  youtube:
+    description: Comando Youtube
+    aliases:
+      - yt
 permissions:
   chunkloader.admin:
     children:

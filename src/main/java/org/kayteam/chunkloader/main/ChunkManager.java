@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class ChunkManager {
 
-    private final ChunkLoader plugin;
+    private final MiPlugin plugin;
 
     public boolean chunkLoad;
     public boolean chunkLoadLogs;
@@ -21,7 +21,7 @@ public class ChunkManager {
     private List<Chunk> chunkList;
     private List<String[]> chunkListStringSplit;
 
-    public ChunkManager(ChunkLoader plugin) {
+    public ChunkManager(MiPlugin plugin) {
         this.plugin = plugin;
     }
 

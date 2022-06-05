@@ -2,7 +2,7 @@ package org.kayteam.chunkloader.inventories;
 
 import org.bukkit.Chunk;
 import org.kayteam.chunkloader.commands.Command_TP;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 import org.kayteam.kayteamapi.inventory.InventoryBuilder;
 import org.kayteam.kayteamapi.yaml.Yaml;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ChunksListInventory extends InventoryBuilder {
 
-    public ChunksListInventory(ChunkLoader plugin, int page){
+    public ChunksListInventory(MiPlugin plugin, int page){
         super(plugin.config.getString("menu.chunk-list.title"), 6);
         Yaml config = plugin.config;
         fillItem(() -> config.getItemStack("menu.general-options.items.fill"), new int[] {6});

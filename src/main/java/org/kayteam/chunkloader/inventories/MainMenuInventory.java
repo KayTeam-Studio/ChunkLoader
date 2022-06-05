@@ -1,12 +1,12 @@
 package org.kayteam.chunkloader.inventories;
 
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.main.MiPlugin;
 import org.kayteam.kayteamapi.inventory.InventoryBuilder;
 import org.kayteam.kayteamapi.yaml.Yaml;
 
 public class MainMenuInventory extends InventoryBuilder {
 
-    public MainMenuInventory(ChunkLoader plugin){
+    public MainMenuInventory(MiPlugin plugin){
         super(plugin.config.getString("menu.main-menu.title"),4);
         Yaml config = plugin.config;
         // Fill
