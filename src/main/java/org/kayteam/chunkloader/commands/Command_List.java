@@ -10,24 +10,18 @@ import java.util.List;
 
 public class Command_List {
 
-    private final ChunkLoader plugin;
-
-    public Command_List(ChunkLoader plugin) {
-        this.plugin = plugin;
-    }
-
     public void chunkList(Player player){
-        ChunkManager chunkManager = plugin.getChunkManager();
+        ChunkManager chunkManager = ChunkLoader.getChunkManager();
 
         List<String> chunkList = new ArrayList<>();
-        for(String key : plugin.data.getStringList("chunks-list")){
+        for(String key : ChunkLoader.data.getStringList("chunks-list")){
             int chunkLocationX = Integer.parseInt(chunkManager.formatChunk(key)[0]);
             int chunkLocationZ = Integer.parseInt(chunkManager.formatChunk(key)[1]);
             String chunkLocationWorld = chunkManager.formatChunk(key)[2];
 
             String chunkCoords = "X: "+chunkLocationX+"; Z: "+chunkLocationZ;
 
-            chunkList.add(plugin.messages.getString("chunkloader.list", new String[][]{
+            chunkList.add(ChunkLoader.messages.getString("chunkloader.list", new String[][]{
                     {"%chunk_coords%", chunkCoords},
                     {"%chunk_world%", chunkLocationWorld}
                 })

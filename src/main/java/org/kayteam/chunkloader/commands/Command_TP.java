@@ -9,14 +9,9 @@ import org.kayteam.chunkloader.main.ChunkLoader;
 import java.util.List;
 
 public class Command_TP {
-    private final ChunkLoader plugin;
-
-    public Command_TP(ChunkLoader plugin){
-        this.plugin = plugin;
-    }
 
     public void chunkTeleport(Player player, int chunkIndex){
-        List<Chunk> chunkList = plugin.getChunkManager().getChunkList();
+        List<Chunk> chunkList = ChunkLoader.getChunkManager().getChunkList();
             try{
                 Chunk chunk = chunkList.get(chunkIndex);
                 double chunkLocationX = chunk.getX()*16+8;
@@ -29,14 +24,14 @@ public class Command_TP {
                         chunkLocationWorld,chunkLocationX,chunkLocationWorld
                         .getHighestBlockYAt((int) chunkLocationX, (int) chunkLocationZ)+1,chunkLocationZ);
 
-                plugin.messages.sendMessage(player, "chunkloader.teleport", new String[][]{
+                ChunkLoader.messages.sendMessage(player, "chunkloader.teleport", new String[][]{
                         {"%chunk_coords%",chunkCoords},
                         {"%chunk_world%",chunkLocationWorld.getName()}
                 });
 
                 player.teleport(chunkLocation);
             }catch (Exception e){
-                plugin.messages.sendMessage(player, "chunkloader.teleport-invalid");
+                ChunkLoader.messages.sendMessage(player, "chunkloader.teleport-invalid");
             }
     }
 }

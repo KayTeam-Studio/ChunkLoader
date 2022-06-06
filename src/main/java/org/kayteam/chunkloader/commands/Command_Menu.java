@@ -6,13 +6,7 @@ import org.kayteam.chunkloader.main.ChunkLoader;
 
 public class Command_Menu {
 
-    private final ChunkLoader plugin;
-
-    public Command_Menu(ChunkLoader plugin) {
-        this.plugin = plugin;
-    }
-
     public void openMenu(Player player){
-        plugin.getInventoryManager().openInventory(player, new MainMenuInventory(plugin));
+        ChunkLoader.getInventoryManager().openInventory(player, new MainMenuInventory());
     }
 }

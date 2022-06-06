@@ -4,8 +4,14 @@ version: ${project.version}
 author: segu23
 api-version: 1.13
 website: https://kayteam.org
-softdepend: [Multiverse-Core]
+softdepend: [Multiverse-Core, WorldEdit]
 commands:
+  addchunkregion:
+    description: AddChunkRegion
+    permission: chunkloader.addchunkregion
+  removechunkregion:
+    description: RemoveChunkRegion
+    permission: chunkloader.removechunkregion
   addchunk:
     description: AddChunk
     permission: chunkloader.addchunk
@@ -21,11 +27,13 @@ commands:
 permissions:
   chunkloader.admin:
     children:
-      chunkloader.addchunk: true
-      chunkloader.removechunk: true
-      chunkloader.list: true
-      chunkloader.tp: true
-      chunkloader.menu: true
-      chunkloader.on: true
-      chunkloader.off: true
-      chunkloader.reload: true
+      - chunkloader.addchunk
+      - chunkloader.removechunk
+      - chunkloader.addchunkregion
+      - chunkloader.removechunkregion
+      - chunkloader.list
+      - chunkloader.tp
+      - chunkloader.menu
+      - chunkloader.on
+      - chunkloader.off
+      - chunkloader.reload

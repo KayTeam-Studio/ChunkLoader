@@ -1,35 +1,40 @@
 package org.kayteam.chunkloader.main;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.kayteam.api.BrandSender;
+import org.kayteam.api.bStats.Metrics;
+import org.kayteam.api.inventory.InventoryManager;
+import org.kayteam.api.simple.yaml.SimpleYaml;
+import org.kayteam.api.updatechecker.UpdateChecker;
 import org.kayteam.chunkloader.commands.Command_AddChunk;
+import org.kayteam.chunkloader.commands.Command_AddChunkRegion;
 import org.kayteam.chunkloader.commands.Command_ChunkLoader;
 import org.kayteam.chunkloader.commands.Command_RemoveChunk;
 import org.kayteam.chunkloader.listeners.ChunkUnload;
 import org.kayteam.chunkloader.listeners.OPJoin;
-import org.kayteam.kayteamapi.BrandSender;
-import org.kayteam.kayteamapi.bStats.Metrics;
-import org.kayteam.kayteamapi.inventory.InventoryManager;
-import org.kayteam.kayteamapi.updatechecker.UpdateChecker;
-import org.kayteam.kayteamapi.yaml.Yaml;
 
 import java.util.Objects;
 
 public class ChunkLoader extends JavaPlugin {
 
-    private ChunkManager chunkManager;
+    private static ChunkLoader instance;
 
-    public Yaml messages;
-    public Yaml messages_es = new Yaml(this, "messages_es");
-    public Yaml messages_en = new Yaml(this, "messages_en");
-    public Yaml data = new Yaml(this,"data");
-    public Yaml config = new Yaml(this,"config");
+    private static ChunkManager chunkManager;
 
-    public final String logPrefix = "&2Chunk&aLoader &7>> &f";
+    public static SimpleYaml messages;
+    private SimpleYaml messages_es;
+    private SimpleYaml messages_en;
+    public static SimpleYaml data;
+    public static SimpleYaml config;
+
+    public static final String logPrefix = "&2Chunk&aLoader &7>> &f";
     private String lang;
 
     @Override
     public void onEnable() {
-        chunkManager = new ChunkManager(this);
+        instance = this;
+        chunkManager = new ChunkManager();
+        inventoryManager = new InventoryManager(this);
         enablePluginUpdateChecker();
         checkPaper();
         registerFiles();
@@ -48,25 +53,29 @@ public class ChunkLoader extends JavaPlugin {
         lang = config.getString("lang", "en");
     }
 
-    public ChunkManager getChunkManager(){
+    public static ChunkManager getChunkManager(){
         return chunkManager;
     }
 
     private void loadMessages(){
         try{
-            messages = new Yaml(this,"messages_"+ lang);
-            messages.registerFileConfiguration();
-            Yaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages"), new String[][]{{"%lang%", "messages_"+lang}});
+            messages = new SimpleYaml(this,"messages_"+ lang);
+            messages.registerYamlFile();
+            SimpleYaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages"), new String[][]{{"%lang%", "messages_"+lang}});
         }catch (Exception e){
-            Yaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages-error"), new String[][]{{"%lang%", "messages_"+lang}});
+            SimpleYaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages-error"), new String[][]{{"%lang%", "messages_"+lang}});
         }
     }
 
     private void registerFiles(){
-        config.registerFileConfiguration();
-        messages_es.registerFileConfiguration();
-        messages_en.registerFileConfiguration();
-        data.registerFileConfiguration();
+        messages_es = new SimpleYaml(this, "messages_es");
+        messages_en = new SimpleYaml(this, "messages_en");
+        config = new SimpleYaml(this,"config");
+        data = new SimpleYaml(this,"data");
+        config.registerYamlFile();
+        messages_es.registerYamlFile();
+        messages_en.registerYamlFile();
+        data.registerYamlFile();
     }
 
     private void enablePluginUpdateChecker(){
@@ -76,13 +85,13 @@ public class ChunkLoader extends JavaPlugin {
         }
     }
 
-    private UpdateChecker updateChecker;
-    public UpdateChecker getUpdateChecker() {
+    private static UpdateChecker updateChecker;
+    public static UpdateChecker getUpdateChecker() {
         return updateChecker;
     }
 
-    private final InventoryManager inventoryManager = new InventoryManager(this);
-    public InventoryManager getInventoryManager() {
+    private static InventoryManager inventoryManager;
+    public static InventoryManager getInventoryManager() {
         return inventoryManager;
     }
 
@@ -92,8 +101,8 @@ public class ChunkLoader extends JavaPlugin {
     }
 
     private void registerListeners(){
-        getServer().getPluginManager().registerEvents(new ChunkUnload(this), this);
-        getServer().getPluginManager().registerEvents(new OPJoin(this), this);
+        getServer().getPluginManager().registerEvents(new ChunkUnload(), this);
+        getServer().getPluginManager().registerEvents(new OPJoin(), this);
         getServer().getPluginManager().registerEvents(inventoryManager, this);
     }
 
@@ -112,11 +121,15 @@ public class ChunkLoader extends JavaPlugin {
         }
     }
 
-
     private void registerCommands() {
-        Objects.requireNonNull(getCommand("addchunk")).setExecutor(new Command_AddChunk(this));
-        Objects.requireNonNull(getCommand("removechunk")).setExecutor(new Command_RemoveChunk(this));
-        Objects.requireNonNull(getCommand("chunkloader")).setExecutor(new Command_ChunkLoader(this));
+        Objects.requireNonNull(getCommand("addchunk")).setExecutor(new Command_AddChunk());
+        Objects.requireNonNull(getCommand("addchunkregion")).setExecutor(new Command_AddChunkRegion());
+        Objects.requireNonNull(getCommand("removechunk")).setExecutor(new Command_RemoveChunk());
+        Objects.requireNonNull(getCommand("chunkloader")).setExecutor(new Command_ChunkLoader());
+    }
+
+    public static ChunkLoader getInstance() {
+        return instance;
     }
 
     @Override

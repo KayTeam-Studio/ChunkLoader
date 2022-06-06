@@ -4,15 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.kayteam.kayteamapi.yaml.Yaml;
+import org.kayteam.api.simple.yaml.SimpleYaml;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class ChunkManager {
-
-    private final ChunkLoader plugin;
 
     public boolean chunkLoad;
     public boolean chunkLoadLogs;
@@ -21,10 +19,6 @@ public class ChunkManager {
     private List<Chunk> chunkList;
     private List<String[]> chunkListStringSplit;
 
-    public ChunkManager(ChunkLoader plugin) {
-        this.plugin = plugin;
-    }
-
     public boolean isPaper() {
         return isPaper;
     }
@@ -32,9 +26,9 @@ public class ChunkManager {
     public void setPaperState(boolean state){
         this.isPaper = state;
         if(state){
-            Yaml.sendSimpleMessage(plugin.getServer().getConsoleSender(), plugin.logPrefix+"&fEnabled Paper version.");
+            SimpleYaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.logPrefix+"&fEnabled Paper version.");
         }else{
-            Yaml.sendSimpleMessage(plugin.getServer().getConsoleSender(), plugin.logPrefix+"&fEnabled Spigot version.");
+            SimpleYaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.logPrefix+"&fEnabled Spigot version.");
         }
     }
 
@@ -47,14 +41,14 @@ public class ChunkManager {
     }
 
     public void setChunkLoadLogs(boolean state){
-        plugin.config.set("log-chunk-load", state);
-        plugin.config.saveFileConfiguration();
+        ChunkLoader.config.set("log-chunk-load", state);
+        ChunkLoader.config.saveYamlFile();
         chunkLoadLogs = state;
     }
 
     public void loadChunk(Chunk chunk){
-        if(plugin.getServer().getWorlds().contains(chunk.getWorld())){
-                Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+        if(ChunkLoader.getInstance().getServer().getWorlds().contains(chunk.getWorld())){
+                Bukkit.getScheduler().runTaskLater(ChunkLoader.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         try{
@@ -65,15 +59,15 @@ public class ChunkManager {
                     }
                 },1);
             if(isChunkLoadLogs()){
-                Yaml.sendSimpleMessage(plugin.getServer().getConsoleSender(), plugin.messages.getString("logs.load"), new String[][]{{"%chunk%", formatStringChunk(chunk)}});
+                SimpleYaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.messages.getString("logs.load"), new String[][]{{"%chunk%", formatStringChunk(chunk)}});
             }
         }
     }
 
     public void enableChunkLoad() {
         loadChunkList();
-        plugin.config.set("chunk-load", true);
-        plugin.config.saveFileConfiguration();
+        ChunkLoader.config.set("chunk-load", true);
+        ChunkLoader.config.saveYamlFile();
         chunkLoad = true;
         for(Chunk chunk : chunkList){
             loadChunk(chunk);
@@ -81,8 +75,8 @@ public class ChunkManager {
     }
 
     public void disableChunkLoad(){
-        plugin.config.set("chunk-load", false);
-        plugin.config.saveFileConfiguration();
+        ChunkLoader.config.set("chunk-load", false);
+        ChunkLoader.config.saveYamlFile();
         chunkLoad = false;
         for(Chunk chunk : chunkList){
             unloadChunk(chunk);
@@ -96,7 +90,7 @@ public class ChunkManager {
             chunk.getWorld().unloadChunk(chunk);
         }
         if(isChunkLoadLogs()){
-            Yaml.sendSimpleMessage(plugin.getServer().getConsoleSender(), plugin.messages.getString("logs.unload"), new String[][]{{"%chunk%", formatStringChunk(chunk)}});
+            SimpleYaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.messages.getString("logs.unload"), new String[][]{{"%chunk%", formatStringChunk(chunk)}});
         }
     }
 
@@ -106,25 +100,25 @@ public class ChunkManager {
         int chunkLocationZ = chunk.getZ();
         String chunkCoords = "X: "+chunkLocationX+"; Z:"+chunkLocationZ;
         if(chunkList.contains(chunk)){
-            List <String> chunkStringList = plugin.data.getStringList("chunks-list");
+            List <String> chunkStringList = ChunkLoader.data.getStringList("chunks-list");
             chunkStringList.remove(formatStringChunk(chunk));
-            plugin.data.set("chunks-list", chunkStringList);
-            plugin.data.saveFileConfiguration();
+            ChunkLoader.data.set("chunks-list", chunkStringList);
+            ChunkLoader.data.saveYamlFile();
             unloadChunk(chunk);
-            plugin.messages.sendMessage(player,"removechunk.correct", new String[][]{{"%chunk_coords%",chunkCoords}});
+            ChunkLoader.messages.sendMessage(player,"removechunk.correct", new String[][]{{"%chunk_coords%",chunkCoords}});
         }else{
-            plugin.messages.sendMessage(player,"removechunk.inexist", new String[][]{{"%chunk_coords%",chunkCoords}});
+            ChunkLoader.messages.sendMessage(player,"removechunk.inexist", new String[][]{{"%chunk_coords%",chunkCoords}});
         }
         loadChunkList();
     }
 
     public void loadChunkList(){
-        chunkStringList = plugin.data.getStringList("chunks-list");
+        chunkStringList = ChunkLoader.data.getStringList("chunks-list");
         List<Chunk> chunksFormated = new ArrayList<>();
         List<String[]> chunksSplited = new ArrayList<>();
         for(String chunkIndex : chunkStringList){
             Chunk chunk = unformatChunk(chunkIndex);
-            if(plugin.getServer().getWorlds().contains(chunk.getWorld())){
+            if(ChunkLoader.getInstance().getServer().getWorlds().contains(chunk.getWorld())){
                 chunksFormated.add(chunk);
                 chunksSplited.add(formatChunk(chunkIndex));
             }
@@ -132,6 +126,7 @@ public class ChunkManager {
         chunkList = chunksFormated;
         chunkListStringSplit = chunksSplited;
     }
+
     public String[] formatChunk(Chunk chunk){
         String[] chunkSplited = new String[3];
         chunkSplited[0] = String.valueOf(chunk.getX());
@@ -166,5 +161,22 @@ public class ChunkManager {
 
     public List<String[]> getChunkListStringSplit(){
         return chunkListStringSplit;
+    }
+
+    public void addChunk(Chunk chunk){
+        String chunkCoords = "X: "+chunk.getX()+"; Z: "+chunk.getZ();
+        String chunkFormated = ChunkLoader.getChunkManager().formatStringChunk(chunk);
+        List<String> chunkList = ChunkLoader.data.getStringList("chunks-list");
+        chunkList.add(chunkFormated);
+        ChunkLoader.data.set("chunks-list", chunkList);
+        ChunkLoader.data.saveYamlFile();
+        ChunkLoader.getChunkManager().getChunkStringList().add(chunkFormated);
+        ChunkLoader.getChunkManager().getChunkList().add(chunk);
+
+        try{
+            chunk.setForceLoaded(true);
+        }catch (NoSuchMethodError e){
+            chunk.load();
+        }
     }
 }

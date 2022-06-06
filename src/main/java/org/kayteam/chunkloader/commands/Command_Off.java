@@ -6,19 +6,13 @@ import org.kayteam.chunkloader.main.ChunkManager;
 
 public class Command_Off {
 
-    private final ChunkLoader plugin;
-
-    public Command_Off(ChunkLoader plugin) {
-        this.plugin = plugin;
-    }
-
     public void disableChunkLoad(Player player){
-        ChunkManager chunkManager = plugin.getChunkManager();
-        if(plugin.config.getBoolean("chunk-load")){
-            plugin.messages.sendMessage(player, "chunkloader.disabled");
+        ChunkManager chunkManager = ChunkLoader.getChunkManager();
+        if(ChunkLoader.config.getBoolean("chunk-load")){
+            ChunkLoader.messages.sendMessage(player, "chunkloader.disabled");
             chunkManager.disableChunkLoad();
         }else{
-            plugin.messages.sendMessage(player, "chunkloader.already-disabled");
+            ChunkLoader.messages.sendMessage(player, "chunkloader.already-disabled");
         }
     }
 }

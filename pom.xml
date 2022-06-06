@@ -6,7 +6,7 @@
 
     <groupId>segu23</groupId>
     <artifactId>ChunkLoader</artifactId>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
 
     <build>
         <plugins>
@@ -58,6 +58,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>worldedit</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -76,7 +80,12 @@
         <dependency>
             <groupId>com.github.KayTeam-Studio</groupId>
             <artifactId>KayTeamAPI</artifactId>
-            <version>v1.2.4</version>
+            <version>v1.3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 </project>

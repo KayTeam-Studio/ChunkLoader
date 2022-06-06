@@ -7,55 +7,35 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.kayteam.api.simple.yaml.SimpleYaml;
 import org.kayteam.chunkloader.main.ChunkLoader;
 import org.kayteam.chunkloader.main.ChunkManager;
-import org.kayteam.kayteamapi.yaml.Yaml;
-
-import java.util.List;
+import org.kayteam.chunkloader.util.PermissionChecker;
 
 public class Command_AddChunk implements CommandExecutor {
 
-    private final ChunkLoader plugin;
-
-    public Command_AddChunk(ChunkLoader plugin) {
-        this.plugin = plugin;
-    }
-
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
         if(sender instanceof Player){
-            ChunkManager chunkManager = plugin.getChunkManager();
             Player player = (Player) sender;
-            if(!player.hasPermission("chunkloader.addchunk")){
-                plugin.messages.sendMessage(player, "command.no-permissions");
-                return false;
-            }
-            Yaml data = plugin.data;
-            Location playerLocation = player.getLocation();
-            Chunk chunkLocation = playerLocation.getChunk();
-            String chunkCoords = "X: "+chunkLocation.getX()+"; Z: "+chunkLocation.getZ();
-            String chunkFormated = chunkManager.formatStringChunk(chunkLocation);
+            if(PermissionChecker.check(player, "chunkloader.addchunk")){
+                ChunkManager chunkManager = ChunkLoader.getChunkManager();
+                SimpleYaml data = ChunkLoader.data;
+                Location playerLocation = player.getLocation();
+                Chunk chunkLocation = playerLocation.getChunk();
+                String chunkCoords = "X: "+chunkLocation.getX()+"; Z: "+chunkLocation.getZ();
+                String chunkFormated = chunkManager.formatStringChunk(chunkLocation);
 
-            if(!data.getStringList("chunks-list").contains(chunkFormated)){
-                List<String> chunkList = data.getStringList("chunks-list");
-                chunkList.add(chunkFormated);
-                data.set("chunks-list", chunkList);
-                plugin.data.saveFileConfiguration();
-                chunkManager.getChunkStringList().add(chunkFormated);
-                chunkManager.getChunkList().add(player.getLocation().getChunk());
+                if(!data.getStringList("chunks-list").contains(chunkFormated)){
+                    chunkManager.addChunk(chunkLocation);
 
-                try{
-                    chunkLocation.setForceLoaded(true);
-                }catch (NoSuchMethodError e){
-                    chunkLocation.load();
+                    ChunkLoader.messages.sendMessage(player, "addchunk.correct", new String[][]{
+                            {"%chunk_coords%", chunkCoords}
+                    });
+                }else{
+                    ChunkLoader.messages.sendMessage(player, "addchunk.exist", new String[][]{
+                            {"%chunk_coords%", chunkCoords}
+                    });
                 }
-
-                plugin.messages.sendMessage(player, "addchunk.correct", new String[][]{
-                        {"%chunk_coords%", chunkCoords}
-                });
-            }else{
-                plugin.messages.sendMessage(player, "addchunk.exist", new String[][]{
-                        {"%chunk_coords%", chunkCoords}
-                });
             }
         }
         return false;
