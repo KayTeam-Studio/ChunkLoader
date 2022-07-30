@@ -1,14 +1,14 @@
 package org.kayteam.chunkloader.inventories;
 
 import org.kayteam.api.inventory.InventoryBuilder;
-import org.kayteam.api.simple.yaml.SimpleYaml;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.ChunkLoader;
+import org.kayteam.storageapi.storage.Yaml;
 
 public class AdminSectionInventory extends InventoryBuilder {
 
     public AdminSectionInventory() {
         super(ChunkLoader.config.getString("menu.admin-section.title"), 4);
-        SimpleYaml config = ChunkLoader.config;
+        Yaml config = ChunkLoader.config;
         // Fill
         fillItem(() -> config.getItemStack("menu.general-options.items.fill"));
         // Back

@@ -1,17 +1,18 @@
-package org.kayteam.chunkloader.main;
+package org.kayteam.chunkloader;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kayteam.api.BrandSender;
 import org.kayteam.api.bStats.Metrics;
 import org.kayteam.api.inventory.InventoryManager;
-import org.kayteam.api.simple.yaml.SimpleYaml;
 import org.kayteam.api.updatechecker.UpdateChecker;
 import org.kayteam.chunkloader.commands.Command_AddChunk;
 import org.kayteam.chunkloader.commands.Command_AddChunkRegion;
 import org.kayteam.chunkloader.commands.Command_ChunkLoader;
 import org.kayteam.chunkloader.commands.Command_RemoveChunk;
-import org.kayteam.chunkloader.listeners.ChunkUnload;
-import org.kayteam.chunkloader.listeners.OPJoin;
+import org.kayteam.chunkloader.listeners.ChunkUnloadListener;
+import org.kayteam.chunkloader.listeners.PlayerJoinListener;
+import org.kayteam.chunkloader.chunk.ChunkManager;
+import org.kayteam.storageapi.storage.Yaml;
 
 import java.util.Objects;
 
@@ -21,11 +22,12 @@ public class ChunkLoader extends JavaPlugin {
 
     private static ChunkManager chunkManager;
 
-    public static SimpleYaml messages;
-    private SimpleYaml messages_es;
-    private SimpleYaml messages_en;
-    public static SimpleYaml data;
-    public static SimpleYaml config;
+    public static Yaml messages;
+    private Yaml messages_es;
+    private Yaml messages_en;
+    private Yaml messages_ru;
+    public static Yaml data;
+    public static Yaml config;
 
     public static final String logPrefix = "&2Chunk&aLoader &7>> &f";
     private String lang;
@@ -59,22 +61,24 @@ public class ChunkLoader extends JavaPlugin {
 
     private void loadMessages(){
         try{
-            messages = new SimpleYaml(this,"messages_"+ lang);
+            messages = new Yaml(this,"messages_"+ lang);
             messages.registerYamlFile();
-            SimpleYaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages"), new String[][]{{"%lang%", "messages_"+lang}});
+            Yaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages"), new String[][]{{"%lang%", "messages_"+lang}});
         }catch (Exception e){
-            SimpleYaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages-error"), new String[][]{{"%lang%", "messages_"+lang}});
+            Yaml.sendSimpleMessage(getServer().getConsoleSender(), messages_en.getString("logs.messages-error"), new String[][]{{"%lang%", "messages_"+lang}});
         }
     }
 
     private void registerFiles(){
-        messages_es = new SimpleYaml(this, "messages_es");
-        messages_en = new SimpleYaml(this, "messages_en");
-        config = new SimpleYaml(this,"config");
-        data = new SimpleYaml(this,"data");
-        config.registerYamlFile();
+        messages_es = new Yaml(this, "messages_es");
+        messages_en = new Yaml(this, "messages_en");
+        messages_ru = new Yaml(this, "messages_ru");
+        config = new Yaml(this,"config");
+        data = new Yaml(this,"data");
         messages_es.registerYamlFile();
         messages_en.registerYamlFile();
+        messages_ru.registerYamlFile();
+        config.registerYamlFile();
         data.registerYamlFile();
     }
 
@@ -101,8 +105,8 @@ public class ChunkLoader extends JavaPlugin {
     }
 
     private void registerListeners(){
-        getServer().getPluginManager().registerEvents(new ChunkUnload(), this);
-        getServer().getPluginManager().registerEvents(new OPJoin(), this);
+        getServer().getPluginManager().registerEvents(new ChunkUnloadListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(inventoryManager, this);
     }
 

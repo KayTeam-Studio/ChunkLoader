@@ -4,15 +4,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.kayteam.chunkloader.main.ChunkLoader;
-import org.kayteam.chunkloader.main.ChunkManager;
+import org.kayteam.chunkloader.ChunkLoader;
+import org.kayteam.chunkloader.chunk.ChunkManager;
 
-public class ChunkUnload implements Listener {
+public class ChunkUnloadListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onUnload(ChunkUnloadEvent event){
         ChunkManager chunkManager = ChunkLoader.getChunkManager();
-        if(chunkManager.getChunkStringList().contains(chunkManager.formatStringChunk(event.getChunk()))){
+        if(chunkManager.getChunkList().contains(event.getChunk())){
             if(chunkManager.isChunkLoad()){
                 chunkManager.loadChunk(event.getChunk());
             }

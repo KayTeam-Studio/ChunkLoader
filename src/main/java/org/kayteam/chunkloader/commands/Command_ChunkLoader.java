@@ -6,9 +6,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.kayteam.api.simple.yaml.SimpleYaml;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.ChunkLoader;
 import org.kayteam.chunkloader.util.PermissionChecker;
+import org.kayteam.storageapi.storage.Yaml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class Command_ChunkLoader implements CommandExecutor, TabCompleter {
                                 new Command_TP().chunkTeleport(player,Integer.parseInt(args[1]));
                             }catch (Exception ignored){}
                         }else{
-                            SimpleYaml.sendSimpleMessage(player, "&c/cl tp <list-number>");
+                            Yaml.sendSimpleMessage(player, "&c/cl tp <list-number>");
                         }
                     }
                 }else if(args[0].equalsIgnoreCase("menu")){
@@ -75,7 +75,7 @@ public class Command_ChunkLoader implements CommandExecutor, TabCompleter {
         }else
         if(args.length == 2){
             if(args[0].equals("tp")){
-                for(int i = 0; i < ChunkLoader.getChunkManager().getChunkStringList().size(); i++){
+                for(int i = 0; i < ChunkLoader.getChunkManager().getChunkList().size(); i++){
                     tabs.add(String.valueOf(i));
                 }
             return tabs;

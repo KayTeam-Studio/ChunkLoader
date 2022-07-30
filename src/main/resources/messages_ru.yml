@@ -1,0 +1,43 @@
+command:
+  only-player: '&2Chunk&aLoader &7>> &f&cЭта команда может быть выполнена только одним игроком.'
+  no-permissions: '&2Chunk&aLoader &7>> &f&cИзвините, у вас нет прав на
+выполнение этой команды.'
+addchunk:
+  correct: '&2Chunk&aLoader &7>> &f&aЧанк &7%chunk_coords% &aбыл успешно зарегистрирован.'
+  exist: '&2Chunk&aLoader &7>> &f&cЧанк &7%chunk_coords% &cуже зарегистрирован.'
+logs:
+  load: '&2Chunk&aLoader &7>> &f&aЧанк &7%chunk% &aбыл загружен успешно.'
+  unload: '&2Chunk&aLoader &7>> &f&cЧанк &7%chunk% &cбыл выгружен успешно.'
+  messages: '&2Chunk&aLoader &7>> &f&7%lang% &aфайл был успешно загружен.'
+  messages-error: '&2Chunk&aLoader &7>> &f&cпроизошла ошибка при попытке загрузить
+файл &7%lang%&c.'
+  enabled: '&2Chunk&aLoader &7>> &f&aЛоги загрузки чанков включены.'
+  disabled: '&2Chunk&aLoader &7>> &f&cЛоги загрузки чанков отключены.'
+removechunk:
+  correct: '&2Chunk&aLoader &7>> &f&aЧанк &7%chunk_coords% &aрегистрация была успешно удалена.'
+  inexist: '&2Chunk&aLoader &7>> &f&cЧанк &7%chunk_coords% &cне зарегистрирован.'
+chunkloader:
+  enabled: '&2Chunk&aLoader &7>> &fЗагрузка чанков активирована.'
+  already-enabled: '&2Chunk&aLoader &7>> &f&cЗагрузка чанков уже активирована.'
+  disabled: '&2Chunk&aLoader &7>> &f&fЗагрузка чанков остановлена.'
+  already-disabled: '&2Chunk&aLoader &7>> &f&cЗагрузка чанков уже приостановлена.'
+  reload: '&2Chunk&aLoader &7>> &fКонфигурация перезагружена успешно.'
+  teleport: '&2Chunk&aLoader &7>> &f&aВы телепортировались в чанк &7%chunk_coords%
+    - %chunk_world%&a.'
+  teleport-invalid: '&2Chunk&aLoader &7>> &f&cВыбранный чанк не существует, воспользуйтесь &7/cl
+    list&c.'
+  region-added: '&2Chunk&aLoader &7>> &aДобавлены все выбранные чанки'
+  help:
+    - '&2Chunk&aLoader &fplugin by segu23'
+    - ''
+    - ' &8» &6/cl help&f: Отображает информацию о командах.'
+    - ' &8» &6/cl on&f: Активирует загрузку чанков.'
+    - ' &8» &6/cl off&f: Останавливает загрузку чанков.'
+    - ' &8» &6/cl list&f: Отображает список зарегистрированных чанков.'
+    - ' &8» &6/cl reload&f: Перезагружает конфигурацию плагина.'
+    - ' &8» &6/cl tp <index>&f: Телепортирует к выбранному чанку.'
+    - ' &8» &6/cl menu&f: Интерактивное меню плагина для управления чанками.'
+    - ' &8» &6/addchunk&f: Регистрирует активный чанк в реестр.'
+    - ' &8» &6/removechunk&f: Удаляет выбранный чанк из реестра.'
+  list: ' &8» &7%chunk_coords% - %chunk_world%'
+  list-null: '&2Chunk&aLoader &7>> &f&cЗарегистрированных чанков нет.'

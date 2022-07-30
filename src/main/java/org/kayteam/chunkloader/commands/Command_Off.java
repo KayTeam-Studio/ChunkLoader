@@ -1,8 +1,8 @@
 package org.kayteam.chunkloader.commands;
 
 import org.bukkit.entity.Player;
-import org.kayteam.chunkloader.main.ChunkLoader;
-import org.kayteam.chunkloader.main.ChunkManager;
+import org.kayteam.chunkloader.ChunkLoader;
+import org.kayteam.chunkloader.chunk.ChunkManager;
 
 public class Command_Off {
 

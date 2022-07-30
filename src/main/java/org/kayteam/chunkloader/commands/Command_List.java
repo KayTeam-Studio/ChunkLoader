@@ -1,9 +1,10 @@
 package org.kayteam.chunkloader.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
-import org.kayteam.chunkloader.main.ChunkLoader;
-import org.kayteam.chunkloader.main.ChunkManager;
+import org.kayteam.chunkloader.ChunkLoader;
+import org.kayteam.chunkloader.chunk.ChunkManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,10 @@ public class Command_List {
         ChunkManager chunkManager = ChunkLoader.getChunkManager();
 
         List<String> chunkList = new ArrayList<>();
-        for(String key : ChunkLoader.data.getStringList("chunks-list")){
-            int chunkLocationX = Integer.parseInt(chunkManager.formatChunk(key)[0]);
-            int chunkLocationZ = Integer.parseInt(chunkManager.formatChunk(key)[1]);
-            String chunkLocationWorld = chunkManager.formatChunk(key)[2];
+        for(Chunk chunk : ChunkLoader.getChunkManager().getChunkList()){
+            int chunkLocationX = chunk.getX();
+            int chunkLocationZ = chunk.getZ();
+            String chunkLocationWorld = chunk.getWorld().getName();
 
             String chunkCoords = "X: "+chunkLocationX+"; Z: "+chunkLocationZ;
 

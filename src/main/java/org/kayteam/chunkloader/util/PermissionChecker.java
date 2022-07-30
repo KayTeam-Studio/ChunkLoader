@@ -1,7 +1,7 @@
 package org.kayteam.chunkloader.util;
 
 import org.bukkit.command.CommandSender;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.ChunkLoader;
 
 public class PermissionChecker {
 

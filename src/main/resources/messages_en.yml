@@ -22,6 +22,7 @@ chunkloader:
   reload: '&2Chunk&aLoader &7>> &f&fConfiguration was reloaded correctly.'
   teleport: '&2Chunk&aLoader &7>> &f&aYou have teleported to the chunk &7%chunk_coords% - %chunk_world%&a.'
   teleport-invalid: '&2Chunk&aLoader &7>> &f&cThe entered chunk is invalid, use &7/cl list&c.'
+  region-added: '&2Chunk&aLoader &7>> &a¡All chunks selected have been added!'
   help:
     - '&2Chunk&aLoader &fplugin by segu23'
     - ''

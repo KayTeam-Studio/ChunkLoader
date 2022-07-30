@@ -2,9 +2,9 @@ package org.kayteam.chunkloader.inventories;
 
 import org.bukkit.Chunk;
 import org.kayteam.api.inventory.InventoryBuilder;
-import org.kayteam.api.simple.yaml.SimpleYaml;
 import org.kayteam.chunkloader.commands.Command_TP;
-import org.kayteam.chunkloader.main.ChunkLoader;
+import org.kayteam.chunkloader.ChunkLoader;
+import org.kayteam.storageapi.storage.Yaml;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class ChunksListInventory extends InventoryBuilder {
 
     public ChunksListInventory(int page){
         super(ChunkLoader.config.getString("menu.chunk-list.title"), 6);
-        SimpleYaml config = ChunkLoader.config;
+        Yaml config = ChunkLoader.config;
         fillItem(() -> config.getItemStack("menu.general-options.items.fill"), new int[] {6});
         // Back
         addItem(48, () -> config.getItemStack("menu.general-options.items.back"));
@@ -25,7 +25,7 @@ public class ChunksListInventory extends InventoryBuilder {
         for (int i = 0; i < 45; i++) {
             int index = ((page * (5 * 9)) - (5 * 9)) + i;
             if (index < chunks.size()) {
-                addItem(i, () -> SimpleYaml.replace(config.getItemStack("menu.chunk-list.items.listed"), new String[][]{
+                addItem(i, () -> config.getItemStack("menu.chunk-list.items.listed", new String[][]{
                         {"%index%", String.valueOf(index)},
                         {"%coords_x%", String.valueOf(chunks.get(index).getX())},
                         {"%coords_z%", String.valueOf(chunks.get(index).getZ())},

@@ -1,5 +1,5 @@
 name: ChunkLoader
-main: org.kayteam.chunkloader.main.ChunkLoader
+main: org.kayteam.chunkloader.ChunkLoader
 version: ${project.version}
 author: segu23
 api-version: 1.13
