@@ -23,6 +23,7 @@ chunkloader:
   teleport: '&2Chunk&aLoader &7>>&f&aTe has teletransportado al chunk &7%chunk_coords% - %chunk_world%&a.'
   teleport-invalid: '&2Chunk&aLoader &7>>&f&cEl chunk ingresado no es correcto, usa &7/cl list&c.'
   region-added: '&2Chunk&aLoader &7>> &a¡Todos los chunks seleccionados fueron añadidos!'
+  region-removed: '&2Chunk&aLoader &7>> &a¡Todos los chunks seleccionados fueron removidos!'
   help:
     - '&2Chunk&aLoader &fplugin by segu23'
     - ''

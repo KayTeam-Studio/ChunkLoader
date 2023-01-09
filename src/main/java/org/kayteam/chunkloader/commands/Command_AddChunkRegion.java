@@ -20,12 +20,16 @@ public class Command_AddChunkRegion implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             try {
                 ChunkManager chunkManager = ChunkLoader.getChunkManager();
                 Player player = (Player) sender;
                 if (!player.hasPermission("chunkloader.addchunkregion")) {
                     ChunkLoader.messages.sendMessage(player, "command.no-permission");
+                    return false;
+                }
+                if(!chunkManager.isWorldEdit()){
+                    ChunkLoader.messages.sendMessage(player, "command.worldedit-disabled");
                     return false;
                 }
                 BukkitPlayer bPlayer = BukkitAdapter.adapt(player);
@@ -47,7 +51,7 @@ public class Command_AddChunkRegion implements CommandExecutor {
                         final Chunk chunk = player.getWorld().getChunkAt(x, z);
                         if (!ChunkLoader.getChunkManager().getChunkList().contains(chunk)) {
                             ChunkLoader.getChunkManager().addChunk(chunk);
-                            String chunkCoords = "X: "+chunk.getX()+"; Z: "+chunk.getZ();
+                            String chunkCoords = "X: " + chunk.getX() + "; Z: " + chunk.getZ();
                             ChunkLoader.messages.sendMessage(player, "addchunk.correct", new String[][]{
                                     {"%chunk_coords%", chunkCoords}
                             });
@@ -55,7 +59,7 @@ public class Command_AddChunkRegion implements CommandExecutor {
                     }
                 }
                 ChunkLoader.messages.sendMessage(sender, "chunkloader.region-added");
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

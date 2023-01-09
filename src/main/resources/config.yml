@@ -1,6 +1,7 @@
 log-chunk-load: true
 chunk-load: true
 lang: en
+update-checker: true
 menu:
   general-options:
     items:

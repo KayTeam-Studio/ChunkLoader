@@ -27,6 +27,7 @@ chunkloader:
   teleport-invalid: '&2Chunk&aLoader &7>> &f&cВыбранный чанк не существует, воспользуйтесь &7/cl
     list&c.'
   region-added: '&2Chunk&aLoader &7>> &aДобавлены все выбранные чанки'
+  region-removed: '&2Chunk&aLoader &7>> &aВсе выбранные фрагменты удалены'
   help:
     - '&2Chunk&aLoader &fplugin by segu23'
     - ''

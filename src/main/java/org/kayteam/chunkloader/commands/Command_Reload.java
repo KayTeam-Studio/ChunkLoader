@@ -5,10 +5,10 @@ import org.kayteam.chunkloader.ChunkLoader;
 
 public class Command_Reload {
 
-    public void commandReload(Player player){
-        ChunkLoader.data.reloadYamlFile();
-        ChunkLoader.messages.reloadYamlFile();
-        ChunkLoader.config.reloadYamlFile();
+    public void commandReload(Player player) {
+        ChunkLoader.data.reload();
+        ChunkLoader.messages.reload();
+        ChunkLoader.config.reload();
         ChunkLoader.messages.sendMessage(player, "chunkloader.reload");
     }
 }

@@ -16,48 +16,60 @@ public class ChunkManager {
     public boolean chunkLoad;
     public boolean chunkLoadLogs;
     private boolean isPaper = false;
+    public boolean updateChecker = true;
     private List<Chunk> chunkList = new ArrayList<>();
+    private boolean worldEdit = false;
+
+    public void checkWorldEdit() {
+        if (Bukkit.getPluginManager().isPluginEnabled("WorldEdit")) {
+            worldEdit = true;
+        }
+    }
+
+    public boolean isWorldEdit() {
+        return worldEdit;
+    }
 
     public boolean isPaper() {
         return isPaper;
     }
 
-    public void setPaperState(boolean state){
+    public void setPaperState(boolean state) {
         this.isPaper = state;
-        if(state){
-            Yaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.logPrefix+"&fEnabled Paper version.");
-        }else{
-            Yaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.logPrefix+"&fEnabled Spigot version.");
+        if (state) {
+            Yaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.logPrefix + "&fEnabled Paper version.");
+        } else {
+            Yaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.logPrefix + "&fEnabled Spigot version.");
         }
     }
 
-    public boolean isChunkLoad(){
+    public boolean isChunkLoad() {
         return chunkLoad;
     }
 
-    public boolean isChunkLoadLogs(){
+    public boolean isChunkLoadLogs() {
         return chunkLoadLogs;
     }
 
-    public void setChunkLoadLogs(boolean state){
+    public void setChunkLoadLogs(boolean state) {
         ChunkLoader.config.set("log-chunk-load", state);
-        ChunkLoader.config.saveYamlFile();
+        ChunkLoader.config.save();
         chunkLoadLogs = state;
     }
 
-    public void loadChunk(Chunk chunk){
-        if(ChunkLoader.getInstance().getServer().getWorlds().contains(chunk.getWorld())){
-                Bukkit.getScheduler().runTaskLater(ChunkLoader.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            chunk.getWorld().setChunkForceLoaded(chunk.getX(), chunk.getZ(), true);
-                        }catch (NoSuchMethodError e){
-                            chunk.getWorld().loadChunk(chunk.getX(), chunk.getZ());
-                        }
+    public void loadChunk(Chunk chunk) {
+        if (ChunkLoader.getInstance().getServer().getWorlds().contains(chunk.getWorld())) {
+            Bukkit.getScheduler().runTaskLater(ChunkLoader.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        chunk.getWorld().setChunkForceLoaded(chunk.getX(), chunk.getZ(), true);
+                    } catch (NoSuchMethodError e) {
+                        chunk.getWorld().loadChunk(chunk.getX(), chunk.getZ());
                     }
-                },1);
-            if(isChunkLoadLogs()){
+                }
+            }, 1);
+            if (isChunkLoadLogs()) {
                 Yaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.messages.getString("logs.load"), new String[][]{{"%chunk%", ChunkUtil.toString(chunk)}});
             }
         }
@@ -66,69 +78,73 @@ public class ChunkManager {
     public void enableChunkLoad() {
         loadChunkList();
         ChunkLoader.config.set("chunk-load", true);
-        ChunkLoader.config.saveYamlFile();
+        ChunkLoader.config.save();
         chunkLoad = true;
     }
 
-    public void disableChunkLoad(){
+    public void disableChunkLoad() {
         ChunkLoader.config.set("chunk-load", false);
-        ChunkLoader.config.saveYamlFile();
+        ChunkLoader.config.save();
         chunkLoad = false;
-        for(Chunk chunk : chunkList){
+        for (Chunk chunk : chunkList) {
             unloadChunk(chunk);
         }
     }
 
-    public void unloadChunk(Chunk chunk){
-        try{
+    public void unloadChunk(Chunk chunk) {
+        try {
             chunk.getWorld().setChunkForceLoaded(chunk.getX(), chunk.getZ(), false);
-        }catch (NoSuchMethodError e){
+        } catch (NoSuchMethodError e) {
             chunk.getWorld().unloadChunk(chunk);
         }
-        if(isChunkLoadLogs()){
+        if (isChunkLoadLogs()) {
             Yaml.sendSimpleMessage(ChunkLoader.getInstance().getServer().getConsoleSender(), ChunkLoader.messages.getString("logs.unload"), new String[][]{{"%chunk%", ChunkUtil.toString(chunk)}});
         }
     }
 
-    public void deleteChunk(Chunk chunk, Player player){
+    public void deleteChunk(Chunk chunk, Player player) {
         World chunkLocationWorld = chunk.getWorld();
         int chunkLocationX = chunk.getX();
         int chunkLocationZ = chunk.getZ();
-        String chunkCoords = "X: "+chunkLocationX+"; Z:"+chunkLocationZ;
-        if(chunkList.contains(chunk)){
+        String chunkCoords = "X: " + chunkLocationX + "; Z:" + chunkLocationZ;
+        if (chunkList.contains(chunk)) {
             getChunkList().remove(chunk);
-            List <String> chunkStringList = ChunkUtil.toStringList(getChunkList());
+            List<String> chunkStringList = ChunkUtil.toStringList(getChunkList());
             ChunkLoader.data.set("chunks-list", chunkStringList);
-            ChunkLoader.data.saveYamlFile();
+            ChunkLoader.data.save();
             unloadChunk(chunk);
-            ChunkLoader.messages.sendMessage(player,"removechunk.correct", new String[][]{{"%chunk_coords%",chunkCoords}});
-        }else{
-            ChunkLoader.messages.sendMessage(player,"removechunk.inexist", new String[][]{{"%chunk_coords%",chunkCoords}});
+            ChunkLoader.messages.sendMessage(player, "removechunk.correct", new String[][]{{"%chunk_coords%", chunkCoords}});
+        } else {
+            ChunkLoader.messages.sendMessage(player, "removechunk.inexist", new String[][]{{"%chunk_coords%", chunkCoords}});
         }
         loadChunkList();
     }
 
-    public void loadChunkList(){
+    public void loadChunkList() {
         chunkList.clear();
         List<String> chunks = ChunkLoader.data.getStringList("chunks-list");
-        for(String chunkString : chunks){
+        for (String chunkString : chunks) {
             Chunk chunk = ChunkUtil.toChunk(chunkString);
-            if(ChunkLoader.getInstance().getServer().getWorlds().contains(chunk.getWorld())){
+            if (ChunkLoader.getInstance().getServer().getWorlds().contains(chunk.getWorld())) {
                 getChunkList().add(chunk);
                 loadChunk(chunk);
             }
         }
     }
 
-    public List<Chunk> getChunkList(){
+    public List<Chunk> getChunkList() {
         return chunkList;
     }
 
-    public void addChunk(Chunk chunk){
+    public void addChunk(Chunk chunk) {
         getChunkList().add(chunk);
         ChunkLoader.data.set("chunks-list", ChunkUtil.toStringList(getChunkList()));
-        ChunkLoader.data.saveYamlFile();
+        ChunkLoader.data.save();
 
         loadChunk(chunk);
+    }
+
+    public boolean isUpdateChecker() {
+        return updateChecker;
     }
 }

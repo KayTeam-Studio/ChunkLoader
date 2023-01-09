@@ -1,4 +1,5 @@
 command:
+  worldedit-disabled: "&2Chunk&aLoader &7>> &f&cThis command is disabled because you don't have WorldEdit installed on your server."
   only-player: '&2Chunk&aLoader &7>> &f&cThis command can only be executed by one player.'
   no-permissions: "&2Chunk&aLoader &7>> &f&cSorry, you don't have permissions to execute this command."
 addchunk:
@@ -23,6 +24,7 @@ chunkloader:
   teleport: '&2Chunk&aLoader &7>> &f&aYou have teleported to the chunk &7%chunk_coords% - %chunk_world%&a.'
   teleport-invalid: '&2Chunk&aLoader &7>> &f&cThe entered chunk is invalid, use &7/cl list&c.'
   region-added: '&2Chunk&aLoader &7>> &a¡All chunks selected have been added!'
+  region-removed: '&2Chunk&aLoader &7>> &a¡All chunks selected have been removed!'
   help:
     - '&2Chunk&aLoader &fplugin by segu23'
     - ''

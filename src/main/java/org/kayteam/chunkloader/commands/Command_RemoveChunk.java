@@ -10,9 +10,9 @@ import org.kayteam.chunkloader.ChunkLoader;
 public class Command_RemoveChunk implements CommandExecutor {
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
-        if(sender instanceof Player){
+        if (sender instanceof Player) {
             Player player = (Player) sender;
-            if(!player.hasPermission("chunkloader.removechunk")){
+            if (!player.hasPermission("chunkloader.removechunk")) {
                 ChunkLoader.messages.sendMessage(player, "command.no-permissions");
                 return false;
             }

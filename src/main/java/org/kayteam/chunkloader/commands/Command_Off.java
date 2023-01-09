@@ -6,12 +6,12 @@ import org.kayteam.chunkloader.chunk.ChunkManager;
 
 public class Command_Off {
 
-    public void disableChunkLoad(Player player){
+    public void disableChunkLoad(Player player) {
         ChunkManager chunkManager = ChunkLoader.getChunkManager();
-        if(ChunkLoader.config.getBoolean("chunk-load")){
+        if (ChunkLoader.config.getBoolean("chunk-load")) {
             ChunkLoader.messages.sendMessage(player, "chunkloader.disabled");
             chunkManager.disableChunkLoad();
-        }else{
+        } else {
             ChunkLoader.messages.sendMessage(player, "chunkloader.already-disabled");
         }
     }

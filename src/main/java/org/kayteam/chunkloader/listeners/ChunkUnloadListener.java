@@ -10,10 +10,10 @@ import org.kayteam.chunkloader.chunk.ChunkManager;
 public class ChunkUnloadListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onUnload(ChunkUnloadEvent event){
+    public void onUnload(ChunkUnloadEvent event) {
         ChunkManager chunkManager = ChunkLoader.getChunkManager();
-        if(chunkManager.getChunkList().contains(event.getChunk())){
-            if(chunkManager.isChunkLoad()){
+        if (chunkManager.getChunkList().contains(event.getChunk())) {
+            if (chunkManager.isChunkLoad()) {
                 chunkManager.loadChunk(event.getChunk());
             }
         }

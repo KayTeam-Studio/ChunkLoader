@@ -1,14 +1,14 @@
 package org.kayteam.chunkloader.inventories;
 
-import org.kayteam.api.inventory.InventoryBuilder;
 import org.kayteam.chunkloader.ChunkLoader;
-import org.kayteam.storageapi.storage.Yaml;
+import org.kayteam.inventoryapi.InventoryBuilder;
+import org.kayteam.storageapi.storage.YML;
 
 public class MainMenuInventory extends InventoryBuilder {
 
-    public MainMenuInventory(){
-        super(ChunkLoader.config.getString("menu.main-menu.title"),4);
-        Yaml config = ChunkLoader.config;
+    public MainMenuInventory() {
+        super(ChunkLoader.config.getString("menu.main-menu.title"), 4);
+        YML config = ChunkLoader.config;
         // Fill
         fillItem(() -> config.getItemStack("menu.general-options.items.fill"));
         // Close

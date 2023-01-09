@@ -1,11 +1,14 @@
 name: ChunkLoader
 main: org.kayteam.chunkloader.ChunkLoader
 version: ${project.version}
-author: segu23
+author: KayTeam
 api-version: 1.13
 website: https://kayteam.org
-softdepend: [Multiverse-Core, WorldEdit]
+softdepend: [ Multiverse-Core, WorldEdit ]
 commands:
+  removechunkregion:
+    description: RemoveChunkRegion
+    permission: chunkloader.removechunkregion
   addchunkregion:
     description: AddChunkRegion
     permission: chunkloader.addchunkregion

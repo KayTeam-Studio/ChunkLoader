@@ -1,39 +1,41 @@
 command:
-  only-player: '&2Chunk&aLoader &7>> &f&cCette commande peut être utilise par une seule personne.'
-  no-permissions: "&2Chunk&aLoader &7>> &f&cDésolé, vous n'avez pas la permission d'exécuter cette commande."
+  worldedit-disabled: "&2Chunk&aLoader &7>> &f&cCette commande est dÃ©sactivÃ©e car vous n'avez pas installÃ© WorldEdit sur votre serveur."
+  only-player: '&2Chunk&aLoader &7>> &f&cCette commande peut ï¿½tre utilise par une seule personne.'
+  no-permissions: "&2Chunk&aLoader &7>> &f&cDï¿½solï¿½, vous n'avez pas la permission d'exï¿½cuter cette commande."
 addchunk:
-  correct: '&2Chunk&aLoader &7>> &f&aChunk &7%chunk_coords% &aa bien été enregistré.'
-  exist: '&2Chunk&aLoader &7>> &f&cChunk &7%chunk_coords% &cest déjà enregistré.'
+  correct: '&2Chunk&aLoader &7>> &f&aChunk &7%chunk_coords% &aa bien ï¿½tï¿½ enregistrï¿½.'
+  exist: '&2Chunk&aLoader &7>> &f&cChunk &7%chunk_coords% &cest dï¿½jï¿½ enregistrï¿½.'
 logs:
-  load: '&2Chunk&aLoader &7>> &f&aChunk &7%chunk% &aa correctement été chargé.'
-  unload: '&2Chunk&aLoader &7>> &f&cChunk &7%chunk% &ca correctement été déchargé.'
-  messages: '&2Chunk&aLoader &7>> &f&ale fichier &7%lang% &aa été chargé avec succès.'
+  load: '&2Chunk&aLoader &7>> &f&aChunk &7%chunk% &aa correctement ï¿½tï¿½ chargï¿½.'
+  unload: '&2Chunk&aLoader &7>> &f&cChunk &7%chunk% &ca correctement ï¿½tï¿½ dï¿½chargï¿½.'
+  messages: '&2Chunk&aLoader &7>> &f&ale fichier &7%lang% &aa ï¿½tï¿½ chargï¿½ avec succï¿½s.'
   messages-error: '&2Chunk&aLoader &7>> &f&cUne erreur est survenu, tentez de charger le fichier &7%lang%&c.'
-  enabled: '&2Chunk&aLoader &7>> &f&a Les logs de Chunk load ont étés activés.'
-  disabled: "&2Chunk&aLoader &7>> &f&cLes logs de Chunk load ont étés désactivés"
+  enabled: '&2Chunk&aLoader &7>> &f&a Les logs de Chunk load ont ï¿½tï¿½s activï¿½s.'
+  disabled: "&2Chunk&aLoader &7>> &f&cLes logs de Chunk load ont ï¿½tï¿½s dï¿½sactivï¿½s"
 removechunk:
-  correct: '&2Chunk&aLoader &7>> &f&aLe chunk &7%chunk_coords% &aa été oublié avec succès.'
-  inexist: "&2Chunk&aLoader &7>> &f&cLe chunk &7%chunk_coords% &c n'est pas enregistré."
+  correct: '&2Chunk&aLoader &7>> &f&aLe chunk &7%chunk_coords% &aa ï¿½tï¿½ oubliï¿½ avec succï¿½s.'
+  inexist: "&2Chunk&aLoader &7>> &f&cLe chunk &7%chunk_coords% &c n'est pas enregistrï¿½."
 chunkloader:
-  enabled: '&2Chunk&aLoader &7>> &f&fLe chargement de chunk est désormais activé.'
-  already-enabled: '&2Chunk&aLoader &7>> &f&cLe chargement de chunk est déjà activé.'
-  disabled: '&2Chunk&aLoader &7>> &f&fLe chargement de chunk a été désactivé.'
-  already-disabled: '&2Chunk&aLoader &7>> &f&cLe chargement de chunk est déjà desactivé.'
-  reload: '&2Chunk&aLoader &7>> &f&fConfiguration réinitialisé avec succès.'
-  teleport: '&2Chunk&aLoader &7>> &f&aVous avez été téléporté au chunk &7%chunk_coords% - %chunk_world%&a.'
-  teleport-invalid: '&2Chunk&aLoader &7>> &f&cLe chunk entré est invalide, utilisez &7/cl list&c.'
-  region-added: '&2Chunk&aLoader &7>> &a¡Tous les chunks selectionnés ont étés ajoutés !'
+  enabled: '&2Chunk&aLoader &7>> &f&fLe chargement de chunk est dï¿½sormais activï¿½.'
+  already-enabled: '&2Chunk&aLoader &7>> &f&cLe chargement de chunk est dï¿½jï¿½ activï¿½.'
+  disabled: '&2Chunk&aLoader &7>> &f&fLe chargement de chunk a ï¿½tï¿½ dï¿½sactivï¿½.'
+  already-disabled: '&2Chunk&aLoader &7>> &f&cLe chargement de chunk est dï¿½jï¿½ desactivï¿½.'
+  reload: '&2Chunk&aLoader &7>> &f&fConfiguration rï¿½initialisï¿½ avec succï¿½s.'
+  teleport: '&2Chunk&aLoader &7>> &f&aVous avez ï¿½tï¿½ tï¿½lï¿½portï¿½ au chunk &7%chunk_coords% - %chunk_world%&a.'
+  teleport-invalid: '&2Chunk&aLoader &7>> &f&cLe chunk entrï¿½ est invalide, utilisez &7/cl list&c.'
+  region-added: '&2Chunk&aLoader &7>> &aï¿½Tous les chunks selectionnï¿½s ont ï¿½tï¿½s ajoutï¿½s !'
+  region-removed: '&2Chunk&aLoader &7>> &aÂ¡Tous les morceaux sÃ©lectionnÃ©s ont Ã©tÃ© supprimÃ©s!'
   help:
     - '&2Chunk&aLoader &fplugin by segu23'
     - ''
-    - ' &8» &6/cl help&f: Affiche les informations des commandes.'
-    - ' &8» &6/cl on&f: Chargement du chunk.'
-    - ' &8» &6/cl off&f: Déchargement du chunk.'
-    - ' &8» &6/cl list&f: Affiche la list des chunks actifs.'
-    - ' &8» &6/cl reload&f: Reload config.'
-    - ' &8» &6/cl tp <index>&f: Vous téléporte vers le chunk chargé.'
-    - ' &8» &6/cl menu&f: Ouvre le menu de la gestion des chunks.'
-    - ' &8» &6/addchunk&f: Ajoute le chunk actuel au registre.'
-    - ' &8» &6/removechunk&f: Supprime le chunk actuel du registre.'
-  list: ' &8» &7%chunk_coords% - %chunk_world%'
-  list-null: "&2Chunk&aLoader &7>> &f&cLe chunk n'est pas enregistré."
+    - ' &8ï¿½ &6/cl help&f: Affiche les informations des commandes.'
+    - ' &8ï¿½ &6/cl on&f: Chargement du chunk.'
+    - ' &8ï¿½ &6/cl off&f: Dï¿½chargement du chunk.'
+    - ' &8ï¿½ &6/cl list&f: Affiche la list des chunks actifs.'
+    - ' &8ï¿½ &6/cl reload&f: Reload config.'
+    - ' &8ï¿½ &6/cl tp <index>&f: Vous tï¿½lï¿½porte vers le chunk chargï¿½.'
+    - ' &8ï¿½ &6/cl menu&f: Ouvre le menu de la gestion des chunks.'
+    - ' &8ï¿½ &6/addchunk&f: Ajoute le chunk actuel au registre.'
+    - ' &8ï¿½ &6/removechunk&f: Supprime le chunk actuel du registre.'
+  list: ' &8ï¿½ &7%chunk_coords% - %chunk_world%'
+  list-null: "&2Chunk&aLoader &7>> &f&cLe chunk n'est pas enregistrï¿½."

@@ -1,19 +1,20 @@
 package org.kayteam.chunkloader.inventories;
 
 import org.bukkit.Chunk;
-import org.kayteam.api.inventory.InventoryBuilder;
-import org.kayteam.chunkloader.commands.Command_TP;
 import org.kayteam.chunkloader.ChunkLoader;
+import org.kayteam.chunkloader.commands.Command_TP;
+import org.kayteam.inventoryapi.InventoryBuilder;
+import org.kayteam.storageapi.storage.YML;
 import org.kayteam.storageapi.storage.Yaml;
 
 import java.util.List;
 
 public class ChunksListInventory extends InventoryBuilder {
 
-    public ChunksListInventory(int page){
+    public ChunksListInventory(int page) {
         super(ChunkLoader.config.getString("menu.chunk-list.title"), 6);
-        Yaml config = ChunkLoader.config;
-        fillItem(() -> config.getItemStack("menu.general-options.items.fill"), new int[] {6});
+        YML config = ChunkLoader.config;
+        fillItem(() -> config.getItemStack("menu.general-options.items.fill"), new int[]{6});
         // Back
         addItem(48, () -> config.getItemStack("menu.general-options.items.back"));
         addLeftAction(48, ((player1, i) -> ChunkLoader.getInventoryManager().openInventory(player1, new MainMenuInventory())));
@@ -25,7 +26,7 @@ public class ChunksListInventory extends InventoryBuilder {
         for (int i = 0; i < 45; i++) {
             int index = ((page * (5 * 9)) - (5 * 9)) + i;
             if (index < chunks.size()) {
-                addItem(i, () -> config.getItemStack("menu.chunk-list.items.listed", new String[][]{
+                addItem(i, () -> Yaml.replace(config.getItemStack("menu.chunk-list.items.listed"), new String[][]{
                         {"%index%", String.valueOf(index)},
                         {"%coords_x%", String.valueOf(chunks.get(index).getX())},
                         {"%coords_z%", String.valueOf(chunks.get(index).getZ())},

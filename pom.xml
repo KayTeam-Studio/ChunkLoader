@@ -6,7 +6,7 @@
 
     <groupId>segu23</groupId>
     <artifactId>ChunkLoader</artifactId>
-    <version>3.1.0</version>
+    <version>3.2.1</version>
 
     <build>
         <plugins>
@@ -31,22 +31,6 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <filters>
-                                <filter>
-                                    <artifact>*:XSeries</artifact>
-                                    <includes>
-                                        <exclude>com/cryptomorin/xseries/XMaterial*</exclude>
-                                    </includes>
-                                </filter>
-                                <filter>
-                                    <artifact>*:KayTeamAPI</artifact>
-                                    <includes>
-                                        <exclude>org/kayteam/api/bStats</exclude>
-                                        <exclude>org/kayteam/api/simple/yaml</exclude>
-                                        <exclude>org/kayteam/api/updatechecker</exclude>
-                                    </includes>
-                                </filter>
-                            </filters>
                         </configuration>
                     </execution>
                 </executions>
@@ -94,11 +78,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.KayTeam-Studio</groupId>
-            <artifactId>KayTeamAPI</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-        <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>7.3.0-SNAPSHOT</version>
@@ -107,7 +86,12 @@
         <dependency>
             <groupId>com.github.SirOswaldo</groupId>
             <artifactId>storage-api</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.KayTeam-Studio</groupId>
+            <artifactId>inventory-api</artifactId>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
 </project>

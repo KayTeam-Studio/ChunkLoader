@@ -6,12 +6,12 @@ import org.kayteam.chunkloader.chunk.ChunkManager;
 
 public class Command_On {
 
-    public void enableChunkLoad(Player player){
+    public void enableChunkLoad(Player player) {
         ChunkManager chunkManager = ChunkLoader.getChunkManager();
-        if(ChunkLoader.config.getBoolean("chunk-load")){
+        if (ChunkLoader.config.getBoolean("chunk-load")) {
             ChunkLoader.messages.sendMessage(player, "chunkloader.already-enabled");
-        }else{
-            ChunkLoader.config.set("chunk-load",true);
+        } else {
+            ChunkLoader.config.set("chunk-load", true);
             ChunkLoader.messages.sendMessage(player, "chunkloader.enabled");
             chunkManager.enableChunkLoad();
         }
